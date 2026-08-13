@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
         type:String,
         required:true,
         trim:true,
-        maxLength:200
+        maxlength:200
     },
     slug:{
         type:String,
@@ -16,10 +16,10 @@ const postSchema = new mongoose.Schema({
         trim: true,
         index: true,
     },
-    excert:{
+    excerpt:{
         type:String,
         required:true,
-        MaxLength:200
+        maxlength:200
     },
     content:{
         type:String,
