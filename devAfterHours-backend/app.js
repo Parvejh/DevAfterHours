@@ -2,9 +2,10 @@ const express = require('express');
 const app = express();
 const routes = require('./Routes/homeRoute');
 const cors = require('cors');
+const db = require('./Configs/db')
 
-app.set(cors());
-
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 
 app.use('/',routes)
 

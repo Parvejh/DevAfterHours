@@ -1,8 +1,16 @@
-// {
-//   name,
-//   slug,
-//   description,
+const mongoose = require("mongoose")
 
-//   createdAt,
-//   updatedAt
-// }
+const categorySchema = new mongoose.Schema({
+    name:{
+        type:String,
+    },
+    slug:{
+        type:String,
+        trim:true,
+        lowercase:true
+    }
+},{
+    timestamps:true
+})
+
+module.exports = mongoose.model('Category',categorySchema);
