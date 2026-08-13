@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { kMaxLength } = require('node:buffer');
 
 const postSchema = new mongoose.Schema({
     title:{
@@ -18,7 +17,8 @@ const postSchema = new mongoose.Schema({
     excerpt:{
         type:String,
         required:true,
-        maxLength:200
+        maxLength:200,
+        trim:true
     },
     content:{
         type:String,
@@ -27,8 +27,8 @@ const postSchema = new mongoose.Schema({
     },
     coverImage:{
         type:String,
-        required:true,
-        default:null
+        default:null,
+        trim:true
     },
     category:{
         type:mongoose.Schema.Types.ObjectId,
@@ -40,6 +40,11 @@ const postSchema = new mongoose.Schema({
             ref:'Tag' 
         }
     ],
+    author:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    },
     status:{
         type:String,
         enum :['draft','published','archived'],
@@ -53,7 +58,7 @@ const postSchema = new mongoose.Schema({
         type:Number,
         default:0,
         min:0
-    },
+    }
 },{
     timestamps:true
 })

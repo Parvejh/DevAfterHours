@@ -4,29 +4,48 @@ const Post = require('../Models/Post')
 module.exports.createPost = async (req,res)=>{
     try{
         console.log(req.body)
-        const {title,slug,excerpt,content,coverImage} = req.body;
+        const {
+            title,
+            slug,
+            excerpt,
+            content,
+            coverImage,
+            category,
+            tags,
+            status
+        } = req.body;
 
         const post = await Post.findOne({slug});
 
         if(post){
-            return res.status(400).json({
+            return res.status(409).json({
                 success:false,
                 message:"Post already exist.",
             })
         }
 
-        const newPost = await Post.create(req.body);
+        const newPost = await Post.create({
+            title,
+            slug,
+            excerpt,
+            content,
+            coverImage,
+            author:req.user._id
+        });
+
         return res.status(201).json({
             success:true,
             message:"Post created successfully!",
-            newPost
+            data:{
+                post:post
+            }
         })
-    }catch(e){
-        console.log(`Error while Creating post : ${e}`)
+    }catch(error){
+        console.error(`Error while Creating post : ${error}`)
+
         return res.status(500).json({
             success:false,
-            message:"Post not created.",
-            error:e
+            message:"Internal Server error.",
         })
     }
 }
@@ -36,7 +55,10 @@ module.exports.post = async (req,res)=>{
     try{
         const slug = req.params.slug;
 
-        const post = await Post.findOne({slug});
+        const post = await Post.findOne({
+            slug,
+            status:"published"
+        });
         if(!post){
             return res.status(400).json({
                 success:false,
@@ -73,7 +95,23 @@ module.exports.updatePost  = async (req,res)=>{
             })
         }
 
-        const updatedPost = await Post.findOneAndUpdate({slug},req.body);
+        const updatedPost = await Post.findOneAndUpdate(
+            {slug},
+            {
+                title,
+                slug,
+                excerpt,
+                content,
+                coverImage,
+                category,
+                tags,
+                status
+            },{
+                new:true,
+                runValidators:true
+            }
+        );
+
         return res.status(200).json({
             success:true,
             message:"Post Updated successfully",
@@ -93,14 +131,22 @@ module.exports.updatePost  = async (req,res)=>{
 // Delete a post
 module.exports.deletePost  = async (req,res)=>{
     try{
-        const id = req.params.id;
+        const postId = req.params.id;
 
-        const post = await Post.findById(id);
+        const post = await Post.findById(postId);
 
         if(!post){
             return res.status(400).json({
                 status:"error",
                 message:"Post does not exist.",
+            })
+        }
+
+        // Validate user deleting the post
+        if(post.author.toString() !== req.user._id.toString()){
+            return res.status(403).json({
+                success:false,
+                message:"You are not allowed to delete this post"
             })
         }
 
