@@ -10,21 +10,21 @@ module.exports.createPost = async (req,res)=>{
 
         if(post){
             return res.status(400).json({
-                status:"error",
+                success:false,
                 message:"Post already exist.",
             })
         }
 
         const newPost = await Post.create(req.body);
         return res.status(201).json({
-            status:"success",
+            success:true,
             message:"Post created successfully!",
             newPost
         })
     }catch(e){
         console.log(`Error while Creating post : ${e}`)
         return res.status(500).json({
-            status:"error",
+            success:false,
             message:"Post not created.",
             error:e
         })
@@ -39,20 +39,20 @@ module.exports.post = async (req,res)=>{
         const post = await Post.findOne({slug});
         if(!post){
             return res.status(400).json({
-                status:"error",
+                success:false,
                 message:"Post does not exist.",
             })
         }
 
         return res.status(200).json({
-            status:"success",
+            success:true,
             message:"Post retrieved successfully",
             post
         })
     }catch(e){
         console.log(`Error while Getting post : ${e}`)
         return res.status(500).json({
-            status:"error",
+            success:false,
             message:"Opening Post Failed.",
             error:e
         })
@@ -67,15 +67,15 @@ module.exports.updatePost  = async (req,res)=>{
         const post = await Post.findOne({slug});
 
         if(!post){
-            return res.status(400).json({
-                status:"error",
-                message:"Post does not exist.",
+            return res.status(404).json({
+                success:false,
+                message:"Post not found.",
             })
         }
 
         const updatedPost = await Post.findOneAndUpdate({slug},req.body);
         return res.status(200).json({
-            status:"success",
+            success:true,
             message:"Post Updated successfully",
             originalPost:post,
             updatedPost:updatedPost
@@ -83,7 +83,7 @@ module.exports.updatePost  = async (req,res)=>{
     }catch(e){
         console.log(`Error while Updating post : ${e}`)
         return res.status(500).json({
-            status:"error",
+            success:false,
             message:"Updating Post Failed.",
             error:e
         })
