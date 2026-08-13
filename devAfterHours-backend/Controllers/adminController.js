@@ -1,5 +1,6 @@
 const User = require("../Models/User")
 
+// Create New User
 module.exports.createUser = async (req,res)=>{
     try{
         const {name,email,password,bio} = req.body;
@@ -32,6 +33,7 @@ module.exports.createUser = async (req,res)=>{
     }
 }
 
+// Display Login Page
 module.exports.loginPage = (req,res)=>{
     return res.status(500).json({
         status:"success",
@@ -39,6 +41,7 @@ module.exports.loginPage = (req,res)=>{
     })
 }
 
+// Login the User
 module.exports.login = async (req,res)=>{
     try{
         const {email,password} = req.body;

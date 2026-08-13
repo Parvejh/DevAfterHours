@@ -4,6 +4,7 @@ const Post = require('../Models/Post')
 
 // }
 
+// Create a new Post
 module.exports.createPost = async (req,res)=>{
     try{
         console.log(req.body)
@@ -34,7 +35,7 @@ module.exports.createPost = async (req,res)=>{
     }
 }
 
-
+// Display the Post
 module.exports.post = async (req,res)=>{
     try{
         const slug = req.params.slug;
@@ -62,6 +63,7 @@ module.exports.post = async (req,res)=>{
     }
 }
 
+// Update the post
 module.exports.updatePost  = async (req,res)=>{
     try{
         const slug = req.params.slug;
@@ -91,6 +93,8 @@ module.exports.updatePost  = async (req,res)=>{
         })
     }
 }
+
+// Delete a post
 module.exports.deletePost  = async (req,res)=>{
     try{
         const id = req.params.id;
