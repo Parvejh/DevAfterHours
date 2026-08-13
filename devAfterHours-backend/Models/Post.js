@@ -6,20 +6,19 @@ const postSchema = new mongoose.Schema({
         type:String,
         required:true,
         trim:true,
-        maxlength:200
+        maxLength:200
     },
     slug:{
         type:String,
         trim:true,
         unique: true,
         lowercase: true,
-        trim: true,
         index: true,
     },
     excerpt:{
         type:String,
         required:true,
-        maxlength:200
+        maxLength:200
     },
     content:{
         type:String,
