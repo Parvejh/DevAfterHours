@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const homeController = require("../Controllers/homeController");
 const adminRoutes = require('../Routes/adminRoutes')
+const postRoutes = require('../Routes/postRoutes')
 
 
 // TO display home page
@@ -14,5 +15,6 @@ router.get("/",homeController.home);
 // router.post('/subscribe',homeController.subscribe)
 
 router.use('/admin',adminRoutes);
+router.use('/post',postRoutes);
 
 module.exports = router;

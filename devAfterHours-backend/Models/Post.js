@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { kMaxLength } = require('node:buffer');
 
-const blogPostSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     title:{
         type:String,
         required:true,
@@ -28,7 +28,7 @@ const blogPostSchema = new mongoose.Schema({
     },
     coverImage:{
         type:String,
-        require:true,
+        required:true,
         default:null
     },
     category:{
