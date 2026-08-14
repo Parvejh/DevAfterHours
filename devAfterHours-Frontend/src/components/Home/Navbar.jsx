@@ -1,14 +1,20 @@
 import {Link} from "react-router-dom"
+import { useState } from "react";
 
 const Navbar = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(
+        !!localStorage.getItem("token")
+    );
     return (
         <nav className="border-b border-zinc-200 bg-white/80 backdrop-blur-md">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
                 {/* Logo */}
                 <div>
-                    <h1 className="text-lg font-bold tracking-tight text-zinc-900">
+                    <Link 
+                    to='/'
+                    className="text-lg font-bold tracking-tight text-zinc-900">
                         DevAfterHours
-                    </h1>
+                    </Link>
                 </div>
                 {/* Navigation */}
                 <div className="flex items-center gap-8">
@@ -27,19 +33,38 @@ const Navbar = () => {
                         Posts
                     </Link>
 
-                    <a
-                        href="#"
+                    <Link
+                        to="/about"
                         className="text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
                     >
                         About
-                    </a>
+                    </Link>
 
-                    <Link
+                    {isLoggedIn ? (
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem("token");
+                                    setIsLoggedIn(false);
+                                }}
+                                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+                            >
+                                Logout
+                            </button>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+                            >
+                                Sign In
+                            </Link>
+                    )}
+
+                    {/* <Link
                         to="/login"
                         className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
                     >
                         Sign In
-                    </Link>
+                    </Link> */}
 
                 </div>
             </div>
