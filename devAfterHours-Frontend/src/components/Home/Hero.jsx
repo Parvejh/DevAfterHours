@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom"
 
 const Hero = () => {
     return (
@@ -14,16 +15,17 @@ const Hero = () => {
                         </span>
                     </h1>
 
-                    <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg">
+                    <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg mb-5">
                         Practical notes on software development,
                         things I'm learning, and things I'm building.
                     </p>
 
-                    <button
-                        className="mt-8 rounded-xl bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-zinc-800"
+                    <Link
+                        to='/posts'
+                        className=" rounded-xl bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-zinc-800"
                     >
                         Explore Posts
-                    </button>
+                    </Link>
 
                 </div>
             </section>

@@ -20,12 +20,12 @@ const Navbar = () => {
                         Home
                     </a>
 
-                    <a
-                        href="#"
+                    <Link
+                        to="/posts"
                         className="text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
                     >
                         Posts
-                    </a>
+                    </Link>
 
                     <a
                         href="#"
