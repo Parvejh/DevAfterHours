@@ -1,24 +1,43 @@
 import { LogIn,Mail,KeyRound,Eye,EyeClosed } from 'lucide-react';
 import { useState } from 'react';
+import { loginUser } from '../../services/authServices';
+
 
 const Body = () => {
     const[email,setEmail] = useState('')
     const[password,setPassword] = useState('')
     const[showPassword,setShowPassword] = useState(false)
-    const [errors, setErrors] = useState({});
+    const[errors, setErrors] = useState({});
+    const[isLoading,setIsLoading] = useState(false);
 
-    const submitHandler = (e)=>{
+    const submitHandler = async (e)=>{
         e.preventDefault();
         const isValid = validateForm();
 
         if (!isValid) {
             return;
         }
-    }
 
-    const togglePassword = ()=>{
-        console.log("clicked")
-        setShowPassword(prev=>!prev)
+        setIsLoading(true);
+
+        // Login user
+        try{
+            const data = await loginUser({
+                email,
+                password
+            })
+
+            console.log("Login successfull : ",data)
+
+        }catch(error){
+            console.error(`Login failed : ${error}`)
+        }finally{
+            setIsLoading(false);
+        }
+
+        // setTimeout(()=>{
+        //     setIsLoading(false)
+        // },3000)
     }
 
     const validateForm = ()=>{
@@ -84,9 +103,9 @@ const Body = () => {
                         id="passwordInput" 
                         className='w-full py-1 outline-none ml-2' 
                         placeholder='password'/>
-                        <button onClick={togglePassword}>
+                        <p onClick={()=>setShowPassword(prev=>!prev)}>
                             {showPassword&&true ? <Eye /> :<EyeClosed />}
-                        </button>
+                        </p>
                     </div>
                     <div className='text-red-600 py-1'>
                         {errors.password && (
@@ -96,7 +115,9 @@ const Body = () => {
                         )}
                     </div>
                 </div>
-                <button className='bg-zinc-800 cursor-pointer text-white rounded active:scale-98 active:text-white/80 text-xl py-3'>Sign In</button>
+                <button className='bg-zinc-800 cursor-pointer text-white rounded active:scale-98 active:text-white/80 text-xl py-3'>
+                    {isLoading?"Signing in..":"Sign In"}
+                </button>
             </form>
             <div className='flex items-center justify-between text-lg text-zinc-700'>
                 <h3>Don't have an account yet?</h3>

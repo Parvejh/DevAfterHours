@@ -5,6 +5,8 @@ const authRoutes = require('./Routes/authRoutes')
 const postRoutes = require('./Routes/postRoutes')
 const cors = require('cors');
 
+app.use(cors())
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
