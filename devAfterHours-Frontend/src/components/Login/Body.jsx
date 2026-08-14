@@ -2,6 +2,7 @@ import { LogIn,Mail,KeyRound,Eye,EyeClosed } from 'lucide-react';
 import { useState } from 'react';
 import { loginUser } from '../../services/authServices';
 
+// This change is made in second branch
 
 const Body = () => {
     const[email,setEmail] = useState('')
@@ -9,10 +10,12 @@ const Body = () => {
     const[showPassword,setShowPassword] = useState(false)
     const[errors, setErrors] = useState({});
     const[isLoading,setIsLoading] = useState(false);
+    const[error,setError] = useState('');
 
     const submitHandler = async (e)=>{
         e.preventDefault();
         const isValid = validateForm();
+        setError("")
 
         if (!isValid) {
             return;
@@ -30,6 +33,10 @@ const Body = () => {
             console.log("Login successfull : ",data)
 
         }catch(error){
+            setError(
+                error.response?.data?.message || 
+                "Something went Wrong. Please try again!"
+            )
             console.error(`Login failed : ${error}`)
         }finally{
             setIsLoading(false);
@@ -68,6 +75,11 @@ const Body = () => {
                     Sign In
                 </h1>
             </div>
+            {error && (
+                <div className="mb-5 rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-600">
+                    {error}
+                </div>
+            )}
             <form onSubmit={(e)=>submitHandler(e)} className='flex flex-col items-stretch mb-4'>
                 <div className="flex flex-col justify-center items-start mb-3">
                     <h2 className='text-zinc-900'>Email</h2>
