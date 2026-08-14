@@ -4,6 +4,7 @@ import Register from "./pages/Register"
 import NotFound from "./pages/NotFound"
 import Home from "./pages/Home"
 import Posts from "./pages/Posts"
+import Post from "./pages/Post"
 
 const App = () => {
   return (
@@ -25,6 +26,9 @@ const App = () => {
           path='/posts' 
           element={<Posts />} 
         />
+        <Route 
+        path="/posts/:slug" 
+        element={<Post />} />
         <Route
           path="*"
           element={<NotFound />}

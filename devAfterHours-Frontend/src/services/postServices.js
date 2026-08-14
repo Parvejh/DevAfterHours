@@ -6,3 +6,8 @@ export const getPosts = async ()=>{
     const data = response.data;
     return data;
 }
+
+export const getPostBySlug = async (slug)=>{
+    const response = await axios.get(`${API_URL}/${slug}`);
+    return response.data
+}

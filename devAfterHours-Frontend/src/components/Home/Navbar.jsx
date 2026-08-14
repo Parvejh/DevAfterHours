@@ -13,12 +13,12 @@ const Navbar = () => {
                 {/* Navigation */}
                 <div className="flex items-center gap-8">
 
-                    <a
-                        href="/"
+                    <Link
+                        to="/"
                         className="text-sm font-medium text-zinc-900"
                     >
                         Home
-                    </a>
+                    </Link>
 
                     <Link
                         to="/posts"
