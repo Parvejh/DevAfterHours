@@ -5,9 +5,15 @@ const Body = () => {
     const[email,setEmail] = useState('')
     const[password,setPassword] = useState('')
     const[showPassword,setShowPassword] = useState(false)
+    const [errors, setErrors] = useState({});
 
     const submitHandler = (e)=>{
         e.preventDefault();
+        const isValid = validateForm();
+
+        if (!isValid) {
+            return;
+        }
     }
 
     const togglePassword = ()=>{
@@ -15,10 +21,30 @@ const Body = () => {
         setShowPassword(prev=>!prev)
     }
 
+    const validateForm = ()=>{
+        const newErrors = {};
+
+        if (!email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            newErrors.email = "Enter a valid email address";
+        }
+
+        if (!password) {
+            newErrors.password = "Password is required";
+        } else if (password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters";
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+    }
+
     return (
         <div className='h-full w-full'>
             <div className='flex gap-1 items-center mb-4'>
-                <LogIn size={35}/>
+                <LogIn size={20}/>
                 <h1 className='text-zinc-950 font-semibold'>
                     Sign In
                 </h1>
@@ -26,7 +52,7 @@ const Body = () => {
             <form onSubmit={(e)=>submitHandler(e)} className='flex flex-col items-stretch mb-4'>
                 <div className="flex flex-col justify-center items-start mb-3">
                     <h2 className='text-zinc-900'>Email</h2>
-                    <div className="w-full rounded text-lg flex items-center mt-1 px-2 bg-white/20">
+                    <div className={`w-full rounded text-lg flex items-center mt-1 px-2 bg-white/20`}>
                         <Mail />
                         <input 
                         type="text" 
@@ -34,14 +60,21 @@ const Body = () => {
                         onChange={(e)=>{setEmail(e.target.value)}} 
                         value={email}
                         id="emailInput" 
-                        className='w-full py-1 outline-none ml-2' 
+                        className="w-full py-1 outline-none ml-2"
                         placeholder='you@example.com' 
                         />
+                    </div>
+                    <div className='text-red-600 py-1'>
+                        {errors.email && (
+                            <p className="mt-1 text-sm text-red-700">
+                                {errors.email}
+                            </p>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col justify-center items-start mb-5">
                     <h2 className='text-zinc-900'>Password</h2>
-                    <div className="w-full rounded text-lg flex items-center mt-1 px-2 bg-white/20">
+                    <div className={`w-full rounded text-lg flex items-center mt-1 px-2 bg-white/20`}>
                         <KeyRound />
                         <input 
                         type={showPassword && true ? "text": "password"}
@@ -55,6 +88,13 @@ const Body = () => {
                             {showPassword&&true ? <Eye /> :<EyeClosed />}
                         </button>
                     </div>
+                    <div className='text-red-600 py-1'>
+                        {errors.password && (
+                            <p className="mt-1 text-sm text-red-700">
+                                {errors.password}
+                            </p>
+                        )}
+                    </div>
                 </div>
                 <button className='bg-zinc-800 cursor-pointer text-white rounded active:scale-98 active:text-white/80 text-xl py-3'>Sign In</button>
             </form>
@@ -62,8 +102,11 @@ const Body = () => {
                 <h3>Don't have an account yet?</h3>
                 <a className='hover:text-zinc-950 cursor-pointer'>Register</a>
             </div>
+            <p className='text-sm text-zinc-800 tracking-wide text-center mt-2 pt-2 border-t-1 border-zinc-500'>
+                Code. Learn. Build. Repeat.
+            </p>
         </div>
-  )
+    )
 }
 
 export default Body
