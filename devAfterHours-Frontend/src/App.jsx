@@ -2,6 +2,7 @@ import { Routes,Route } from "react-router-dom"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import NotFound from "./pages/NotFound"
+import Home from "./pages/Home"
 
 const App = () => {
   return (
@@ -11,7 +12,7 @@ const App = () => {
         <Route path='/register' element={<Register />} />
         <Route
             path="/"
-            element={<h1>Home Page</h1>}
+            element={<Home />}
         />
         <Route
             path="*"
