@@ -1,7 +1,9 @@
+import Login from "./pages/Login"
+
 const App = () => {
   return (
-    <div>
-      App
+    <div className="h-screen w-full">
+      <Login />
     </div>
   )
 }
