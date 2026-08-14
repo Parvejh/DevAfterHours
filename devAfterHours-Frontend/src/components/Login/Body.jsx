@@ -1,8 +1,7 @@
 import { LogIn,Mail,KeyRound,Eye,EyeClosed } from 'lucide-react';
 import { useState } from 'react';
 import { loginUser } from '../../services/authServices';
-
-// This change is made in second branch
+import {useNavigate} from 'react-router-dom'
 
 const Body = () => {
     const[email,setEmail] = useState('')
@@ -11,6 +10,8 @@ const Body = () => {
     const[errors, setErrors] = useState({});
     const[isLoading,setIsLoading] = useState(false);
     const[error,setError] = useState('');
+
+    const navigate = useNavigate();
 
     const submitHandler = async (e)=>{
         e.preventDefault();
@@ -29,8 +30,12 @@ const Body = () => {
                 email,
                 password
             })
+            // set the user into local storage
+            localStorage.setItem("token",data.data.token)
 
             console.log("Login successfull : ",data)
+            // Redirect to home page after successfull login
+            navigate('/')
 
         }catch(error){
             setError(
