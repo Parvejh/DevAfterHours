@@ -3,7 +3,6 @@ const Post = require('../Models/Post')
 // Create a new Post
 module.exports.createPost = async (req,res)=>{
     try{
-        console.log(req.body)
         const {
             title,
             slug,
@@ -30,6 +29,7 @@ module.exports.createPost = async (req,res)=>{
             excerpt,
             content,
             coverImage,
+            status,
             author:req.user._id
         });
 
@@ -37,12 +37,11 @@ module.exports.createPost = async (req,res)=>{
             success:true,
             message:"Post created successfully!",
             data:{
-                post:post
+                post:newPost
             }
         })
     }catch(error){
         console.error(`Error while Creating post : ${error}`)
-
         return res.status(500).json({
             success:false,
             message:"Internal Server error.",

@@ -6,6 +6,7 @@ import Home from "./pages/Home"
 import Posts from "./pages/Posts"
 import Post from "./pages/Post"
 import Dashboard from "./pages/Dashboard"
+import CreatePost from "./pages/CreatePost";
 import ProtectedRoute from "./components/ProtectedRoute"
 
 const App = () => {
@@ -27,6 +28,14 @@ const App = () => {
               <Dashboard />
             </ProtectedRoute>
           } 
+        />
+        <Route
+          path="/dashboard/posts/new"
+          element={
+              <ProtectedRoute>
+                  <CreatePost />
+              </ProtectedRoute>
+          }
         />
         <Route 
           path='/register' 
