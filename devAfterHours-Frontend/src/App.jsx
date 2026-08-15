@@ -5,6 +5,8 @@ import NotFound from "./pages/NotFound"
 import Home from "./pages/Home"
 import Posts from "./pages/Posts"
 import Post from "./pages/Post"
+import Dashboard from "./pages/Dashboard"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const App = () => {
   return (
@@ -17,6 +19,14 @@ const App = () => {
         <Route 
           path='/login' 
           element={<Login />} 
+        />
+        <Route 
+          path='/dashboard' 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
         />
         <Route 
           path='/register' 

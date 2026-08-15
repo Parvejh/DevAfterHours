@@ -39,7 +39,8 @@ const Body = () => {
 
             console.log("Login successfull : ",data)
             // Redirect to home page after successfull login
-            navigate('/')
+            // navigate('/')
+            navigate('/dashboard')
 
         }catch(error){
             setError(

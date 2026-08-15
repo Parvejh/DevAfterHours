@@ -1,10 +1,8 @@
 import {Link} from "react-router-dom"
-import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        !!localStorage.getItem("token")
-    );
+    const {isAuthenticated, logout} = useAuth();
     return (
         <nav className="border-b border-zinc-200 bg-white/80 backdrop-blur-md">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -43,12 +41,9 @@ const Navbar = () => {
                         About
                     </Link>
 
-                    {isLoggedIn ? (
+                    {isAuthenticated ? (
                             <button
-                                onClick={() => {
-                                    localStorage.removeItem("token");
-                                    setIsLoggedIn(false);
-                                }}
+                                onClick={logout}
                                 className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
                             >
                                 Logout
