@@ -2,6 +2,7 @@ import { LogIn,Mail,KeyRound,Eye,EyeClosed } from 'lucide-react';
 import { useState } from 'react';
 import { loginUser } from '../../services/authServices';
 import {useNavigate} from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext';
 
 const Body = () => {
     const[email,setEmail] = useState('')
@@ -12,12 +13,12 @@ const Body = () => {
     const[error,setError] = useState('');
 
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     const submitHandler = async (e)=>{
         e.preventDefault();
         const isValid = validateForm();
         setError("")
-
         if (!isValid) {
             return;
         }
@@ -31,7 +32,10 @@ const Body = () => {
                 password
             })
             // set the user into local storage
-            localStorage.setItem("token",data.data.token)
+            // localStorage.setItem("token",data.data.token)
+
+            // using context
+            login(data.data.token)
 
             console.log("Login successfull : ",data)
             // Redirect to home page after successfull login
@@ -140,7 +144,7 @@ const Body = () => {
                 <h3>Don't have an account yet?</h3>
                 <a className='hover:text-zinc-950 cursor-pointer'>Register</a>
             </div>
-            <p className='text-sm text-zinc-800 tracking-wide text-center mt-2 pt-2 border-t-1 border-zinc-500'>
+            <p className='text-sm text-zinc-800 tracking-wide text-center mt-2 pt-2\=-]90[7812356`4T   border-t-1 border-zinc-500'>
                 Code. Learn. Build. Repeat.
             </p>
         </div>

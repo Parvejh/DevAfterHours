@@ -16,6 +16,9 @@ const Navbar = () => {
                         DevAfterHours
                     </Link>
                 </div>
+                <div>
+                    {/* {data.value} */}
+                </div>
                 {/* Navigation */}
                 <div className="flex items-center gap-8">
 
@@ -58,14 +61,6 @@ const Navbar = () => {
                                 Sign In
                             </Link>
                     )}
-
-                    {/* <Link
-                        to="/login"
-                        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
-                    >
-                        Sign In
-                    </Link> */}
-
                 </div>
             </div>
         </nav>
