@@ -3,11 +3,18 @@ const router = express.Router();
 const postController = require('../Controllers/postController')
 const authMiddleware = require('../Middlewares/authMiddleware')
 
-// get all posts
+// get all public posts
 router.get('/',postController.getPosts);
+
+// get manage posts ( put before /:slug route to avoid this route getting confused with /:slug)
+router.get('/manage',
+    authMiddleware,
+    postController.getManagePosts
+);
 
 // display Post page
 router.get('/:slug',postController.post)
+
 
 // Create new post
 router.post(

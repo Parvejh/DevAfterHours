@@ -7,6 +7,11 @@ export const getPosts = async ()=>{
     const data = response.data;
     return data;
 }
+export const getManagePosts = async (token)=>{
+    const response = await axios.get(`${API_URL}/manage`,{headers:{Authorization:`Bearer ${token}`}});
+    const data = response.data;
+    return data;
+}
 
 export const getPostBySlug = async (slug)=>{
     const response = await axios.get(`${API_URL}/${slug}`);

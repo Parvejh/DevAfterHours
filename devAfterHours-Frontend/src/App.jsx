@@ -7,20 +7,24 @@ import Posts from "./pages/Posts"
 import Post from "./pages/Post"
 import Dashboard from "./pages/Dashboard"
 import CreatePost from "./pages/CreatePost";
+import ManagePosts from "./pages/ManagePosts";
 import ProtectedRoute from "./components/ProtectedRoute"
 
 const App = () => {
   return (
     <div className="h-screen w-full">
       <Routes>
+        {/* Home page */}
         <Route
           path="/"
           element={<Home />}
         />
+        {/* Login page */}
         <Route 
           path='/login' 
           element={<Login />} 
         />
+        {/* Dashbaord page */}
         <Route 
           path='/dashboard' 
           element={
@@ -29,6 +33,16 @@ const App = () => {
             </ProtectedRoute>
           } 
         />
+        {/* Dashboard Posts page */}
+        <Route
+          path="/dashboard/posts"
+          element={
+              <ProtectedRoute>
+                  <ManagePosts />
+              </ProtectedRoute>
+          }
+        />
+        {/* Create new Post page */}
         <Route
           path="/dashboard/posts/new"
           element={
@@ -37,17 +51,22 @@ const App = () => {
               </ProtectedRoute>
           }
         />
+        {/* Register page */}
         <Route 
           path='/register' 
           element={<Register />} 
         />
+        {/* Public posts page */}
         <Route 
           path='/posts' 
           element={<Posts />} 
         />
+        {/* Specific post page */}
         <Route 
         path="/posts/:slug" 
-        element={<Post />} />
+        element={<Post />} 
+        />
+        {/* 404 Not Found page */}
         <Route
           path="*"
           element={<NotFound />}

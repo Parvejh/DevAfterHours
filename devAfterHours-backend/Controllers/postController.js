@@ -49,12 +49,33 @@ module.exports.createPost = async (req,res)=>{
     }
 }
 
-// Gets all post
+// Gets all public post
 module.exports.getPosts = async (req,res)=>{
     try{
         const posts = await Post.find({
             status:'published'
         }).sort({
+            publishedAt:-1
+        });
+
+        return res.status(200).json({
+            success:true,
+            message:"All Post retrieved successfully",
+            posts:posts
+        })
+
+    }catch(error){
+        console.error(`Internal Server Error : ${error}`);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to retrieve posts"
+        })
+    }
+}
+// Gets manage post
+module.exports.getManagePosts = async (req,res)=>{
+    try{
+        const posts = await Post.find({}).sort({
             publishedAt:-1
         });
 
