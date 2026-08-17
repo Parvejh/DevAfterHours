@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import Navbar from "../components/Home/Navbar"
 import { getManagePosts } from "../services/postServices";
-import PostCard from "../components/Postcard";
 import { useAuth } from "../context/AuthContext";
+import ManagePostCard from "../components/ManagePostCard";
 
 
 const ManagePosts = () => {
@@ -24,19 +24,20 @@ const ManagePosts = () => {
             }
         }
         extractPosts();
-    },[])
+    },[token])
 
     return (
         <div>
             <Navbar />
-            <main>
+            <main className="py-10 px-20">
                 <h1 className="text-4xl font-bold tracking-tight text-zinc-950">
-                    All Posts
+                    My Posts
                 </h1>
 
                 <p className="mt-3 text-zinc-500 mb-5">
-                    Explore everything I've written.
+                    Manage your drafts, published posts, and archived posts.
                 </p>
+
 
                 {
                     error && (
@@ -52,17 +53,19 @@ const ManagePosts = () => {
                         </p>
                     )
                 }
-
-                {
-                    !error && !isLoading && (
-                        posts.map((post)=>{
-                            return <PostCard 
-                                key={post._id}
-                                post={post}
-                            />
-                        })
-                    )
-                }
+                
+                <section className="flex flex-wrap items-start gap-2 ">
+                    {
+                        !error && !isLoading && (
+                            posts.map((post)=>{
+                                return (<ManagePostCard 
+                                    key={post._id}
+                                    post={post}
+                                />)
+                            })
+                        )
+                    }
+                </section>
             </main>
         </div>
     )
