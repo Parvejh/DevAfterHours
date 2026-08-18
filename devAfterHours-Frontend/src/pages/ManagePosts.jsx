@@ -26,6 +26,12 @@ const ManagePosts = () => {
         extractPosts();
     },[token])
 
+    const handlePostDelete = (deletedPostId) => {
+        setPosts((previousPosts) => {
+            return previousPosts.filter((post) => post._id !== deletedPostId);
+        });
+    };
+
     return (
         <div>
             <Navbar />
@@ -61,6 +67,7 @@ const ManagePosts = () => {
                                 return (<ManagePostCard 
                                     key={post._id}
                                     post={post}
+                                    onDelete={handlePostDelete}
                                 />)
                             })
                         )

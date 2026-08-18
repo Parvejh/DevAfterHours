@@ -37,3 +37,11 @@ export const createPost = async(data,token)=>{
     console.log(response.data);
     return response.data
 }
+
+
+export const deletePost = async(id,token)=>{
+    const response = await axios.delete(`${API_URL}/${id}`,
+        {headers:{Authorization:`Bearer ${token}`}}
+    )
+    return response.data
+}

@@ -222,7 +222,6 @@ module.exports.updatePost  = async (req,res)=>{
 module.exports.deletePost  = async (req,res)=>{
     try{
         const postId = req.params.id;
-
         const post = await Post.findById(postId);
 
         if(!post){
@@ -231,7 +230,6 @@ module.exports.deletePost  = async (req,res)=>{
                 message:"Post does not exist.",
             })
         }
-
         // Validate user deleting the post
         if(post.author.toString() !== req.user._id.toString()){
             return res.status(403).json({
@@ -240,11 +238,11 @@ module.exports.deletePost  = async (req,res)=>{
             })
         }
 
-        const deletedPost = await Post.findByIdAndDelete(id);
+        const deletedPost = await Post.findByIdAndDelete(postId);
         return res.status(200).json({
             status:"success",
             message:"Post Deleted successfully",
-            deletedPost:deletedPost
+            deletedPost
         })
     }catch(e){
         console.log(`Error while Deleting post : ${e}`)
