@@ -12,6 +12,19 @@ router.get('/manage',
     postController.getManagePosts
 );
 
+
+// Edit the post for edit
+router.get('/edit/:id',
+    authMiddleware,
+    postController.getPostForEdit
+);
+
+// Edit a post
+router.patch('/edit/:id',
+    authMiddleware,
+    postController.editPost
+);
+
 // display Post page
 router.get('/:slug',postController.post)
 

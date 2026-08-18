@@ -1,15 +1,22 @@
+import {  useNavigate } from "react-router-dom"
+
 const ManagePostCard = ({post}) => {
+    const navigate = useNavigate();
     return (
         <div className={`w-80 p-4 max-h-1/2 rounded flex flex-col gap-2 shadow-lg`}>
             <header className="flex items-center justify-between gap-2 ">
                 <h2 className="text-lg font-semibold">
                     {post.title}
                 </h2>
-                <p className="text-sm text-zinc-500">
-                    {post.publishedAt
+                <p 
+                className={`text-white px-1 text-sm rounded 
+                    ${post.status==='draft'?"bg-gray-500":(post.status==='published'?"bg-green-500":"bg-orange-500")}
+                `}>
+                    {post.status.charAt(0).toUpperCase() + post.status.slice(1)}
+                    {/* {post.publishedAt
                         ? new Date(post.publishedAt).toLocaleDateString()
                         : "Draft"
-                    }
+                    } */}
                 </p>
             </header>
             <section className="body flex flex-col justify-center">
@@ -26,7 +33,10 @@ const ManagePostCard = ({post}) => {
                 </div>
             </section>
             <footer className="flex items-center justify-end gap-2">
-                <button className="rounded px-2 py-1 text-sm cursor-pointer active:scale-95 bg-green-500 text-white">
+                <button 
+                onClick={()=>{navigate(`/dashboard/posts/edit/${post._id}`)}}
+                className="rounded px-2 py-1 text-sm cursor-pointer active:scale-95 bg-green-500 text-white"
+                >
                     Edit
                 </button>
                 <button className="rounded px-2 py-1 text-sm cursor-pointer active:scale-95 bg-red-500 text-white">

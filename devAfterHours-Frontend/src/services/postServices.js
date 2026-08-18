@@ -13,6 +13,17 @@ export const getManagePosts = async (token)=>{
     return data;
 }
 
+export const editPost = async (id,postData,token)=>{
+    const response = await axios.patch(`${API_URL}/edit/${id}`,postData,{headers:{Authorization:`Bearer ${token}`}});
+    const data = response.data;
+    return data;
+}
+
+export const getPostForEdit = async (id,token)=>{
+    const response = await axios.get(`${API_URL}/edit/${id}`,{headers:{Authorization:`Bearer ${token}`}});
+    return response.data
+}
+
 export const getPostBySlug = async (slug)=>{
     const response = await axios.get(`${API_URL}/${slug}`);
     return response.data

@@ -94,6 +94,51 @@ module.exports.getManagePosts = async (req,res)=>{
     }
 }
 
+// edit post
+module.exports.editPost = async(req,res)=>{
+    try{
+        const id = req.params.id;
+        const updatedPostData = req.body
+        const updatedPost = await Post.findByIdAndUpdate(id,updatedPostData)
+        return res.json({
+            success:true,
+            message:"post edit",
+            post:updatedPost
+        })
+    }catch(error){
+        console.error(`Internal Server Error : ${error}`);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to Edit post"
+        })
+    }
+}
+
+// get edit post data
+module.exports.getPostForEdit = async(req,res)=>{
+    try{
+        const id = req.params.id;
+        const post = await Post.findById(id)
+        if(!post){
+            return res.status(404).json({
+            success:false,
+            message:"Post does not exist"
+        })
+        }
+        return res.status(200).json({
+            success:true,
+            message:"Post found",
+            post:post
+        })
+    }catch(error){
+        console.error(`Internal Server Error : ${error}`);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to find post to edit"
+        })
+    }
+}
+
 // Display the Post
 module.exports.post = async (req,res)=>{
     try{
