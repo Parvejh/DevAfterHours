@@ -3,7 +3,7 @@ import {  useNavigate } from "react-router-dom"
 const ManagePostCard = ({post}) => {
     const navigate = useNavigate();
     return (
-        <div className={`w-80 p-4 max-h-1/2 rounded flex flex-col gap-2 shadow-lg`}>
+        <div className={`w-78 p-4 h-80 rounded flex flex-col gap-2 shadow-lg`}>
             <header className="flex items-center justify-between gap-2 ">
                 <h2 className="text-lg font-semibold">
                     {post.title}
@@ -19,7 +19,7 @@ const ManagePostCard = ({post}) => {
                     } */}
                 </p>
             </header>
-            <section className="body flex flex-col justify-center">
+            <section className="body flex flex-col grow-1 justify-start">
                 <p className="mb-2">
                     {post.excerpt}
                 </p>

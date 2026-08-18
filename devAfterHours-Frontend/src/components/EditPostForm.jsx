@@ -20,16 +20,14 @@ const EditPostForm = (props) => {
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        // console.log({
-        //     title,slug,status,excerpt,content,coverImage
-        // })
+        console.log("HANDLE SUBMIT CALLED")
         try{
             setIsLoading(true)
             setError("")
             setSuccessmessage("")
             const updatedPostData = {title,slug,status,excerpt,content,coverImage};
             await editPost(postId,updatedPostData,token);
-            setSuccessmessage("Post Updated.Redirecting to Dashboard..")
+            setSuccessmessage("Post Updated Successfully. Redirecting to Dashboard..")
             setTimeout(()=>{
                 navigate('/dashboard/posts')
             },2000)
@@ -43,14 +41,15 @@ const EditPostForm = (props) => {
 
     return (
         <div className="min-h-fit bg-zinc-50">
-            <main className="mx-auto max-w-4xl px-6 py-6">
-                <h1 className="text-3xl font-bold tracking-tight text-zinc-950">
+            <main className="mx-auto max-w-4xl px-6 py-3">
+                <h1 className="text-3xl font-bold tracking-tight text-zinc-950 ">
                     Edit Post
+                    <span className="text-sm text-zinc-500 ml-5 font-medium">
+                        Edit/Update the Post.
+                    </span>
                 </h1>
 
-                <p className="mt-2 text-zinc-500">
-                    Edit/Update the Post.
-                </p>
+                
                 {
                     error &&
                     <p className="mt-2 text-red-500">
@@ -70,7 +69,7 @@ const EditPostForm = (props) => {
                     </p>
                 }
                 <form 
-                onSubmit={(e)=>handleSubmit(e)}
+                onSubmit={handleSubmit}
                 className="mt-5 flex flex-col gap-5 w-full"
                 >
                     <div className="flex gap-5 w-full">
@@ -167,8 +166,9 @@ const EditPostForm = (props) => {
                         <button
                             type="submit"
                             className="rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 "
+                            disabled = {isLoading?true:false}
                         >
-                            {isLoading?'Editing post':'Edit Post'}
+                            {isLoading?'Updating post':'Update Post'}
                         </button>
                     </div>
                 </form>

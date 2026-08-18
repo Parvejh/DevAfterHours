@@ -100,9 +100,10 @@ module.exports.editPost = async(req,res)=>{
         const id = req.params.id;
         const updatedPostData = req.body
         const updatedPost = await Post.findByIdAndUpdate(id,updatedPostData)
+        console.log(updatedPost)
         return res.json({
             success:true,
-            message:"post edit",
+            message:"Post Edited Successfully",
             post:updatedPost
         })
     }catch(error){
