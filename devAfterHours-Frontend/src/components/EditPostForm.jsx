@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useAuth } from "../context/AuthContext"
 import { editPost } from "../services/postServices"
 import { useNavigate } from "react-router-dom"
 
@@ -14,19 +13,17 @@ const EditPostForm = (props) => {
     const [error,setError] = useState("");
     const [successmessage,setSuccessmessage] = useState('')
     const {postId} = props;
-    const {token} = useAuth();
     const navigate = useNavigate();
 
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log("HANDLE SUBMIT CALLED")
         try{
             setIsLoading(true)
             setError("")
             setSuccessmessage("")
             const updatedPostData = {title,slug,status,excerpt,content,coverImage};
-            await editPost(postId,updatedPostData,token);
+            await editPost(postId,updatedPostData);
             setSuccessmessage("Post Updated Successfully. Redirecting to Dashboard..")
             setTimeout(()=>{
                 navigate('/dashboard/posts')

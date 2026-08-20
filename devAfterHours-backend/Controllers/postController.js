@@ -99,12 +99,35 @@ module.exports.editPost = async(req,res)=>{
     try{
         const id = req.params.id;
         const updatedPostData = req.body
-        const updatedPost = await Post.findByIdAndUpdate(id,updatedPostData)
-        console.log(updatedPost)
-        return res.json({
+        const existingPost = await Post.findById(id);
+
+        if(!existingPost){
+            return res.status(404).json({
+                success:false,
+                message:"Post not Found"
+            })
+        }
+        // Handle publishedAt based on status change
+        if(existingPost.status!== 'published' &&
+            updatedPostData.status === 'published'
+        ){
+            updatedPostData.publishedAt = new Date();
+        }
+
+        if(existingPost.status=== 'published' &&
+            updatedPostData.status !== 'published'
+        ){
+            updatedPostData.publishedAt = null;
+        }
+        
+
+        await Post.findByIdAndUpdate(id,updatedPostData,{
+            new:true,
+            runValidators:true
+        })
+        return res.status(200).json({
             success:true,
-            message:"Post Edited Successfully",
-            post:updatedPost
+            message:"Post Updated Successfully"
         })
     }catch(error){
         console.error(`Internal Server Error : ${error}`);
@@ -195,7 +218,8 @@ module.exports.updatePost  = async (req,res)=>{
                 coverImage,
                 category,
                 tags,
-                status
+                status,
+                publishedAt:new Date.now()
             },{
                 new:true,
                 runValidators:true

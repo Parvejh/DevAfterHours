@@ -1,4 +1,3 @@
-import axios from 'axios'
 import api from "../services/api"
 // import {token} from '../context/AuthContext'
 
@@ -23,7 +22,7 @@ export const getManagePosts = async ()=>{
 // }
 
 export const editPost = async (id,postData)=>{
-    const response = await axios.patch(`/posts/edit/${id}`,postData);
+    const response = await api.patch(`/posts/edit/${id}`,postData);
     return response.data;
 }
 

@@ -34,27 +34,37 @@ const Navbar = () => {
                         Posts
                     </Link>
 
-                    <Link
-                        to="/about"
-                        className="text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
-                    >
-                        About
-                    </Link>
+                    {!isAuthenticated &&
+                        <Link
+                            to="/about"
+                            className="text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+                        >
+                            About
+                        </Link>
+                    }
 
                     {isAuthenticated ? (
+                        <>
+                            <Link
+                            to="/dashboard"
+                            className="hover:border-b-1 text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+                            >
+                                Dashboard
+                            </Link>
                             <button
                                 onClick={logout}
                                 className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
                             >
                                 Logout
                             </button>
+                        </>
                         ) : (
-                            <Link
-                                to="/login"
-                                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
-                            >
-                                Sign In
-                            </Link>
+                        <Link
+                            to="/login"
+                            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+                        >
+                            Sign In
+                        </Link>
                     )}
                 </div>
             </div>

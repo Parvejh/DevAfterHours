@@ -9,10 +9,9 @@ export const AuthProvider = ({ children }) => {
         localStorage.getItem("token")
     );
 
-    const [user,setUser] = useState(JSON.parse(localStorage.getItem("user")))
+    const [user,setUser] = useState(null)
 
     const [isLoading,setIsLoading] = useState(true);
-    const [error,setError] = useState("")
 
     const login = (token,user) => {
         localStorage.setItem("token", token);
@@ -22,7 +21,6 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("user");
         setToken(null);
         setUser(null)
     };
@@ -33,7 +31,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const validateSession = async () => {
             const storedToken = localStorage.getItem("token");
-            setError("")
             if (!storedToken) {
                 setIsLoading(false);
                 return;
@@ -41,19 +38,11 @@ export const AuthProvider = ({ children }) => {
 
             try {
                 const data = await getCurrentUser(storedToken);
-
                 setToken(storedToken);
                 setUser(data.user);
-
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify(data.user)
-                );
             } catch(error) {
                 localStorage.removeItem("token");
-                localStorage.removeItem("user");
                 console.error(`Error in validating session : ${error}`)
-                setError(error.response?.data?.message)
                 setToken(null);
                 setUser(null);
             } finally {
@@ -71,7 +60,6 @@ export const AuthProvider = ({ children }) => {
                 user,
                 isAuthenticated,
                 isLoading,
-                error,
                 login,
                 logout,
             }}
