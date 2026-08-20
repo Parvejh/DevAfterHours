@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Home/Navbar";
 import { createPost } from "../services/postServices";
 import Posteditor from "../components/Editor/Posteditor";
+import { getCategories } from "../services/categoryServices";
 
 const CreatePost = () => {
 
@@ -11,6 +12,8 @@ const CreatePost = () => {
     const [coverImage,setCoverImage] = useState("")
     const [content,setContent] = useState("")
     const [status, setStatus] = useState("draft");
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState("");
     const [isLoading,setIsLoading] = useState(false);
     const [error,setError] = useState("");
     const [successmessage,setSuccessmessage] = useState('')
@@ -31,10 +34,12 @@ const CreatePost = () => {
                     excerpt,
                     coverImage,
                     content,
-                    status
+                    status,
+                    category
                 }
             )
-            console.log(createdPost)
+            // Set Category 
+            setCategory("")
             // set success message
             setSuccessmessage("Post created successfully!")
             // clear the form fields
@@ -74,6 +79,25 @@ const CreatePost = () => {
             .replace(/-+/g, "-");
     };
 
+    useEffect(()=>{
+        const fetchCategories = async()=>{
+            try{
+                setError("")
+                setIsLoading(true)
+                const data = await getCategories();
+                console.log(data.categories)
+                setCategories(data.categories) 
+            }catch(error){
+                console.error(`Error in fetching categories: ${error}`)
+                setError(error.response?.data?.message)
+            }finally{
+                setIsLoading(false)
+            }
+        }
+
+        fetchCategories();
+    },[])
+
     return (
         <div className="min-h-screen bg-zinc-50">
             <Navbar />
@@ -103,8 +127,7 @@ const CreatePost = () => {
                 onSubmit={handleSubmit}
                 className="mt-5 flex flex-col gap-5 w-full"
                 >
-                    <div className="flex gap-5 w-full">
-                        <div className="left w-1/2 flex flex-col gap-3">
+                        <div className="left w-full flex flex-col gap-3">
                             {/* Title Input */}
                             <div className="flex flex-col justify-center items-start gap-2 w-full">
                                 <h3 className="text-xl text-zinc-800">Title</h3>
@@ -151,8 +174,8 @@ const CreatePost = () => {
                             <div className="flex flex-col justify-center items-start gap-2 w-full">
                                 <h3 className="text-xl text-zinc-900">Excerpt</h3>
                                 <textarea 
-                                className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
-                                rows={4}
+                                className="resize-none outline-none bg-zinc-100 shadow p-2 rounded w-full"
+                                rows={3}
                                 value={excerpt}
                                 type="text" 
                                 name="excerpt" 
@@ -174,45 +197,62 @@ const CreatePost = () => {
                                 onChange={(e)=>{setCoverImage(e.target.value)}}
                                 />
                             </div>
-                            {/* Status Input */}
-                            <div className="flex flex-col justify-center items-start gap-2 w-full">
-                                <h3 className="text-xl text-zinc-900">Status</h3>
-                                <select 
-                                className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
-                                name="status" 
-                                id="statusInput"
-                                value={status}
-                                onChange={(e) => setStatus(e.target.value)}
-                                >
-                                    <option value="draft">Draft</option>
-                                    <option value="published">Published</option>
-                                    <option value="archived">Archived</option>
-                                </select>
+                            <div className="flex items-center justify-between gap-5">
+                                {/* Status Input */}
+                                <div className="flex flex-col justify-center items-start gap-2 w-full">
+                                    <h3 className="text-xl text-zinc-900">Status</h3>
+                                    <select 
+                                    className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
+                                    name="status" 
+                                    id="statusInput"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    >
+                                        <option value="draft">Draft</option>
+                                        <option value="published">Published</option>
+                                        <option value="archived">Archived</option>
+                                    </select>
+                                </div>
+                                {/* Category Input */}
+                                <div className="flex flex-col justify-center items-start gap-2 w-full">
+                                    <h3 className="text-xl text-zinc-900">Category</h3>
+                                    <select 
+                                    className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
+                                    name="category" 
+                                    id="categoryInput"
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)}
+                                    >
+                                        {categories.map((category)=>{
+                                            return <option key={category._id} value={`${category.slug}`}>
+                                                {category.name}
+                                            </option>
+                                        })}
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        {/* Content Input */}
-                        <div className="right w-1/2 flex flex-col justify-start ">
                             {/* Content Input */}
-                            <div className="flex flex-col justify-center items-start gap-2 w-full">
-                                <h3 className="text-xl text-zinc-900">Content</h3>
-                                <Posteditor
-                                    content={content}
-                                    onChange={setContent}
-                                />
-                                {/* <textarea 
-                                className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
-                                rows={18}
-                                value={content}
-                                type="text" 
-                                name="content" 
-                                id="econtentInput" 
-                                placeholder="Content of the post"
-                                onChange={(e)=>{setContent(e.target.value)}}
-                                /> */}
+                            <div className="right w-full flex flex-col justify-start ">
+                                {/* Content Input */}
+                                <div className="flex flex-col justify-center items-start gap-2 w-full">
+                                    <h3 className="text-xl text-zinc-900">Content</h3>
+                                    <Posteditor
+                                        content={content}
+                                        onChange={setContent}
+                                    />
+                                    {/* <textarea 
+                                    className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
+                                    rows={18}
+                                    value={content}
+                                    type="text" 
+                                    name="content" 
+                                    id="econtentInput" 
+                                    placeholder="Content of the post"
+                                    onChange={(e)=>{setContent(e.target.value)}}
+                                    /> */}
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <div>
                         <button
                             type="submit"

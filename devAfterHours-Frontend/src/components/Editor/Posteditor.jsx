@@ -103,7 +103,7 @@ const Posteditor = ({ content, onChange }) => {
             {/* Editor */}
             <EditorContent
                 editor={editor}
-                className="max-h-[400px] p-4 overflow-scroll"
+                className="max-h-80 p-4 overflow-scroll"
             />
 
         </div>
