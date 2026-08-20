@@ -13,6 +13,7 @@ const CreatePost = () => {
     const [isLoading,setIsLoading] = useState(false);
     const [error,setError] = useState("");
     const [successmessage,setSuccessmessage] = useState('')
+    const [isSlugEdited, setIsSlugEdited] = useState(false);
     
     const handleSubmit= async (event)=>{
         event.preventDefault();
@@ -62,6 +63,15 @@ const CreatePost = () => {
         setStatus("draft")
     }
 
+    const generateSlug = (text) => {
+        return text
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-");
+    };
+
     return (
         <div className="min-h-screen bg-zinc-50">
             <Navbar />
@@ -103,12 +113,24 @@ const CreatePost = () => {
                                 name="title" 
                                 id="titleInput" 
                                 placeholder="Title of the post"
-                                onChange={(e)=>{setTitle(e.target.value)}}
+                                onChange={(e)=>{
+                                    const value = e.target.value
+                                    setTitle(value)
+                                    if(!isSlugEdited){
+                                        setSlug(generateSlug(value))
+                                    }
+                                    }
+                                }
                                 />
                             </div>
                             {/* Slug Input */}
                             <div className="flex flex-col justify-center items-start gap-2 w-full">
                                 <h3 className="text-xl text-zinc-900">Slug</h3>
+                                {!isSlugEdited && (
+                                    <span className="text-xs text-zinc-400">
+                                        Auto-generated
+                                    </span>
+                                )}
                                 <input 
                                 className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
                                 value={slug}
@@ -116,7 +138,11 @@ const CreatePost = () => {
                                 name="slug" 
                                 id="slugInput" 
                                 placeholder="Slug for the post"
-                                onChange={(e)=>{setSlug(e.target.value)}}
+                                onChange={(e)=>{
+                                    setIsSlugEdited(true)
+                                    setSlug(generateSlug(e.target.value))
+                                    }
+                                }
                                 />
                             </div>
                             {/* Excerpt Input */}
