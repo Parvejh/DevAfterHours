@@ -11,3 +11,8 @@ export const loginUser = async (credentials)=>{
 
     return response.data
 }
+
+export const getCurrentUser = async(token)=>{
+    const response = await axios.get(`${API_URL}/me`,{headers:{Authorization:`Bearer ${token}`}});
+    return response.data;
+}
