@@ -10,6 +10,7 @@ import CreatePost from "./pages/CreatePost";
 import ManagePosts from "./pages/ManagePosts";
 import ProtectedRoute from "./components/ProtectedRoute"
 import EditPost from "./pages/EditPost"
+import About from "./pages/About"
 
 const App = () => {
   return (
@@ -75,6 +76,11 @@ const App = () => {
         <Route 
         path="/posts/:slug" 
         element={<Post />} 
+        />
+        {/* Aboout page */}
+        <Route
+          path="*"
+          element={<About />}
         />
         {/* 404 Not Found page */}
         <Route
