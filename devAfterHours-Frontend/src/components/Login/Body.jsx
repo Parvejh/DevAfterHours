@@ -27,7 +27,7 @@ const Body = () => {
 
         // Login user
         try{
-            const data = await loginUser({
+            const response = await loginUser({
                 email,
                 password
             })
@@ -35,9 +35,9 @@ const Body = () => {
             // localStorage.setItem("token",data.data.token)
 
             // using context
-            login(data.data.token)
+            login(response.data.token,response.data.user)
 
-            console.log("Login successfull : ",data)
+            console.log("Login successfull : ",response)
             // Redirect to home page after successfull login
             // navigate('/')
             navigate('/dashboard')
