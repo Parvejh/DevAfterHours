@@ -91,9 +91,15 @@ const Post = () => {
                         <div className="my-10 border-t border-zinc-200" />
 
                         {/* Article Content */}
-                        <div className="prose prose-zinc max-w-none">
+                        {/* <div className="prose prose-zinc max-w-none">
                             {post.content}
-                        </div>
+                        </div> */}
+
+                        {/* Article Content */}
+                        <div
+                            className="post-content"
+                            dangerouslySetInnerHTML={{ __html: post.content }}
+                        />
 
                     </article>
                 )}

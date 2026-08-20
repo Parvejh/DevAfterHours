@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Home/Navbar";
 import { createPost } from "../services/postServices";
+import Posteditor from "../components/Editor/Posteditor";
 
 const CreatePost = () => {
 
@@ -21,6 +22,7 @@ const CreatePost = () => {
         setError("")
         setSuccessmessage("")
         try{
+            // console.log("CONTENT:", content);
             // create the post
             const createdPost = await createPost(
                 {
@@ -194,7 +196,11 @@ const CreatePost = () => {
                             {/* Content Input */}
                             <div className="flex flex-col justify-center items-start gap-2 w-full">
                                 <h3 className="text-xl text-zinc-900">Content</h3>
-                                <textarea 
+                                <Posteditor
+                                    content={content}
+                                    onChange={setContent}
+                                />
+                                {/* <textarea 
                                 className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
                                 rows={18}
                                 value={content}
@@ -203,7 +209,7 @@ const CreatePost = () => {
                                 id="econtentInput" 
                                 placeholder="Content of the post"
                                 onChange={(e)=>{setContent(e.target.value)}}
-                                />
+                                /> */}
                             </div>
                         </div>
                     </div>

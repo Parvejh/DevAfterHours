@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { editPost } from "../services/postServices"
 import { useNavigate } from "react-router-dom"
+import Posteditor from './Editor/Posteditor'
 
 const EditPostForm = (props) => {
     const [title,setTitle] = useState(props.formData.title)
@@ -146,7 +147,11 @@ const EditPostForm = (props) => {
                             {/* Content Input */}
                             <div className="flex flex-col justify-center items-start gap-2 w-full">
                                 <h3 className="text-xl text-zinc-900">Content</h3>
-                                <textarea 
+                                <Posteditor
+                                    content={content}
+                                    onChange={setContent}
+                                />
+                                {/* <textarea 
                                 className="outline-none bg-zinc-100 shadow p-2 rounded w-full"
                                 rows={18}
                                 value={content}
@@ -155,7 +160,7 @@ const EditPostForm = (props) => {
                                 id="econtentInput" 
                                 placeholder="Content of the post"
                                 onChange={(e)=>{setContent(e.target.value)}}
-                                />
+                                /> */}
                             </div>
                         </div>
                     </div>
