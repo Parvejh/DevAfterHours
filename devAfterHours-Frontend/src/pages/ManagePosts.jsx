@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import Navbar from "../components/Home/Navbar"
 import { getManagePosts } from "../services/postServices";
-import { useAuth } from "../context/AuthContext";
 import ManagePostCard from "../components/ManagePostCard";
 
 
@@ -9,12 +8,11 @@ const ManagePosts = () => {
     const [posts,setPosts] = useState([]);
     const [isLoading,setIsLoading] = useState(true);
     const [error,setError] = useState('');
-    const {token} = useAuth()
 
     useEffect(()=>{
         const extractPosts = async()=>{
             try{
-                const data = await getManagePosts(token);
+                const data = await getManagePosts();
                 setPosts(data.posts)
             }catch(error){
                 console.error(`Error in fetching admin Posts : ${error}`);
@@ -24,7 +22,7 @@ const ManagePosts = () => {
             }
         }
         extractPosts();
-    },[token])
+    },[])
 
     const handlePostDelete = (deletedPostId) => {
         setPosts((previousPosts) => {

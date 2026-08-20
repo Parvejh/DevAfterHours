@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
-import { useAuth } from "../context/AuthContext";
 import { getPostForEdit } from "../services/postServices";
 import EditPostForm from "../components/EditPostForm";
 import Navbar from "../components/Home/Navbar";
 
 const EditPost = () => {
     const {id} = useParams();
-    const {token} = useAuth();
 
     const[error,setError] = useState("")
     const[isLoading,setIsLoading]= useState(true);
@@ -18,7 +16,7 @@ const EditPost = () => {
         const fetchPost = async()=>{
             try{
                 setError('')
-                const postForEdit = await getPostForEdit(id,token);
+                const postForEdit = await getPostForEdit(id);
                 setPostData(postForEdit.post);
             }catch(error){
                 console.error(`Error in fetching post to edit: ${error}`);

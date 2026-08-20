@@ -79,7 +79,7 @@ const App = () => {
         />
         {/* Aboout page */}
         <Route
-          path="*"
+          path="/about"
           element={<About />}
         />
         {/* 404 Not Found page */}

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Navbar from "../components/Home/Navbar";
 import { createPost } from "../services/postServices";
-import { useAuth } from "../context/AuthContext";
 
 const CreatePost = () => {
 
@@ -14,7 +13,6 @@ const CreatePost = () => {
     const [isLoading,setIsLoading] = useState(false);
     const [error,setError] = useState("");
     const [successmessage,setSuccessmessage] = useState('')
-    const data = useAuth();
     
     const handleSubmit= async (event)=>{
         event.preventDefault();
@@ -31,8 +29,7 @@ const CreatePost = () => {
                     coverImage,
                     content,
                     status
-                },
-                data.token
+                }
             )
             console.log(createdPost)
             // set success message
