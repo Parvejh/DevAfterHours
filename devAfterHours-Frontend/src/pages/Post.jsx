@@ -36,7 +36,7 @@ const Post = () => {
                 {
                     isLoading && (
                         <p className="text-zinc-500">
-                            Loadinggggg......
+                            Loading......
                         </p>
                     )
                 }
@@ -48,28 +48,19 @@ const Post = () => {
                 {post && (
                     <article>
 
-                        {/* Cover Image */}
-                        {post.coverImage && (
-                            <div className="mb-10 overflow-hidden rounded-2xl">
-                                <img
-                                    src={post.coverImage}
-                                    alt={post.title}
-                                    className="h-auto max-h-[500px] w-full object-cover"
-                                />
-                            </div>
-                        )}
+                        
 
                         {/* Article Header */}
-                        <header>
+                        <header >
                             <p className="text-sm font-medium uppercase tracking-wider text-zinc-500">
                                 Development
                             </p>
 
-                            <h1 className="mt-3 text-4xl font-bold tracking-tight text-zinc-950 sm:text-5xl">
+                            <h1 className="mt-3 text-4xl font-bold tracking-tight text-zinc-950 sm:text-5xl wrap-break-word">
                                 {post.title}
                             </h1>
 
-                            <p className="mt-5 text-lg leading-8 text-zinc-600">
+                            <p className="mt-5 text-lg leading-8 text-zinc-600 wrap-break-word">
                                 {post.excerpt}
                             </p>
 
@@ -86,6 +77,17 @@ const Post = () => {
                                 </span>
                             </div>
                         </header>
+
+                        {/* Cover Image */}
+                        {post.coverImage && (
+                            <div className="my-5 overflow-hidden rounded-2xl">
+                                <img
+                                    src={post.coverImage}
+                                    alt={post.title}
+                                    className="h-auto max-h-[500px] w-full object-cover"
+                                />
+                            </div>
+                        )}
 
                         {/* Divider */}
                         <div className="my-10 border-t border-zinc-200" />

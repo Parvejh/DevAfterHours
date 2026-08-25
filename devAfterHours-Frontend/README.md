@@ -450,9 +450,6 @@ tailwindcss
 ## 🔮 Future Improvements
 
 - Better form validation
-- Automatic slug generation
-- Rich text editor
-- Markdown support
 - Image upload instead of image URLs
 - Pagination
 - Filter posts by status
