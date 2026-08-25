@@ -59,15 +59,47 @@ module.exports.createPost = async (req,res)=>{
 // Gets all public post
 module.exports.getPosts = async (req,res)=>{
     try{
-        const posts = await Post.find({
-            status:'published'
-        }).sort({
-            publishedAt:-1
-        });
+        const search = req.query.search
+        // Build the query based on search
+        const query =   (search) 
+                        // If search exist, update the query
+                        ? {status:'published',
+                            $or: [
+                                {
+                                    title: {
+                                        $regex: search,
+                                        $options: "i"
+                                    }
+                                },
+
+                                {
+                                    slug: {
+                                        $regex: search,
+                                        $options: "i"
+                                    }
+                                },
+
+                                {
+                                    excerpt: {
+                                        $regex: search,
+                                        $options: "i"
+                                    }
+                                },
+                                // Leaving the content search
+                                // {
+                                //     content: {
+                                //         $regex: search,
+                                //         $options: "i"
+                                //     }
+                                // }
+                            ]
+                        }      
+                        : {status:'published'}    //default query if no search is there  
+        const posts = await Post.find(query).sort({publishedAt:-1});
 
         return res.status(200).json({
             success:true,
-            message:"All Post retrieved successfully",
+            message:"Post retrieved successfully",
             posts:posts
         })
 

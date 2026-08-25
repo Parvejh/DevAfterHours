@@ -7,11 +7,15 @@ The application provides an admin dashboard for creating, managing, editing, and
 ## 🚀 Features
 
 ### Authentication
+
 - JWT-based authentication
 - Protected dashboard routes
 - Authentication state managed through React Context
-- Token sent through the `Authorization` header
-- Handles invalid/expired authentication tokens
+- Token stored in localStorage
+- User session restored on page reload
+- Current user validated against the backend on application startup
+- Automatically clears invalid/expired sessions
+- Axios interceptor handles authentication headers and authentication errors
 
 ### Blog Management
 - Create new posts
@@ -20,14 +24,59 @@ The application provides an admin dashboard for creating, managing, editing, and
 - Delete posts
 - View published posts
 - Manage post status: Draft, Published, Archived
+- Assign categories to posts
+- Display post category on published posts
+- Track post views
+- Store and display publication date
+- Backend-powered post search
+- Search posts by title, slug or excerpt
+- Displays all published posts when no search results are found
+- Displays a search-specific "no post found" message
 
 ### Post Creation
 - Title
 - Slug
 - Excerpt
 - Cover image URL
-- Content
+- Rich-text content
+- Category
 - Status
+- Draft / Published / Archived selection
+
+### Rich Text Editor
+
+Post content is created using Tiptap.
+
+Current editor capabilities include:
+
+- Bold
+- Italic
+- Headings
+- Bullet lists
+- Ordered lists
+- Blockquotes
+- Code blocks
+- Link support
+
+The editor stores the formatted content as HTML.
+
+Editor flow:
+
+```text
+PostEditor
+    ↓
+User formats content
+    ↓
+Tiptap
+    ↓
+HTML content
+    ↓
+Create/Edit Post
+    ↓
+Backend
+    ↓
+MongoDB
+```
 
 ### Post Editing
 - Fetch existing post using its ID
@@ -406,7 +455,6 @@ tailwindcss
 - Markdown support
 - Image upload instead of image URLs
 - Pagination
-- Search posts
 - Filter posts by status
 - Sort posts
 - Confirmation modal before deletion

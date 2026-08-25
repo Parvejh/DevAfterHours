@@ -5,6 +5,7 @@ import Posteditor from "../components/Editor/Posteditor";
 import { getCategories } from "../services/categoryServices";
 import { useNavigate } from "react-router-dom";
 import PostPreview from "../components/PostPreview";
+import {useAuth} from '../context/AuthContext'
 
 const CreatePost = () => {
 
@@ -22,9 +23,12 @@ const CreatePost = () => {
     const [isSlugEdited, setIsSlugEdited] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
 
+
     const navigate = useNavigate();
+    const isAuthenticated = useAuth()
     
     const handleSubmit= async (event)=>{
+        console.log(isAuthenticated)
         event.preventDefault();
         setIsLoading(true)
         setError("")
@@ -58,7 +62,9 @@ const CreatePost = () => {
                 setSuccessmessage("")
             },2000)
             setTimeout(()=>{
-                navigate('/posts')
+                isAuthenticated 
+                ? navigate('/dashboard/posts')
+                : navigate('/posts')
             },2000)
         }catch(error){
             console.error(`Error in creating post: ${error}`);
@@ -97,7 +103,6 @@ const CreatePost = () => {
                 setError("")
                 setIsLoading(true)
                 const data = await getCategories();
-                console.log(data.categories)
                 setCategories(data.categories) 
             }catch(error){
                 console.error(`Error in fetching categories: ${error}`)
