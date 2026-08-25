@@ -23,6 +23,12 @@ module.exports.createPost = async (req,res)=>{
             })
         }
 
+        // Check if the new post is published
+        if(status==='published')
+            publishedAt = new Date();
+        else 
+            publishedAt = null;
+
         const newPost = await Post.create({
             title,
             slug,
@@ -30,7 +36,8 @@ module.exports.createPost = async (req,res)=>{
             content,
             coverImage,
             status,
-            author:req.user._id
+            author:req.user._id,
+            publishedAt
         });
 
         return res.status(201).json({

@@ -3,6 +3,7 @@ import Navbar from "../components/Home/Navbar";
 import { createPost } from "../services/postServices";
 import Posteditor from "../components/Editor/Posteditor";
 import { getCategories } from "../services/categoryServices";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
 
@@ -18,14 +19,15 @@ const CreatePost = () => {
     const [error,setError] = useState("");
     const [successmessage,setSuccessmessage] = useState('')
     const [isSlugEdited, setIsSlugEdited] = useState(false);
+
+    const navigate = useNavigate();
     
     const handleSubmit= async (event)=>{
         event.preventDefault();
         setIsLoading(true)
         setError("")
         setSuccessmessage("")
-        try{
-            // console.log("CONTENT:", content);
+            try{
             // create the post
             const createdPost = await createPost(
                 {
@@ -42,11 +44,19 @@ const CreatePost = () => {
             setCategory("")
             // set success message
             setSuccessmessage("Post created successfully!")
+            // Scroll to top
+            window.scrollTo({
+                top:0,
+                behavior:"smooth"
+            })
             // clear the form fields
             resetForm();
             // set timer for success meesgae
             setTimeout(()=>{
                 setSuccessmessage("")
+            },2000)
+            setTimeout(()=>{
+                navigate('/posts')
             },2000)
         }catch(error){
             console.error(`Error in creating post: ${error}`);
