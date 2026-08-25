@@ -3,7 +3,8 @@ import Navbar from "../components/Home/Navbar";
 import { createPost } from "../services/postServices";
 import Posteditor from "../components/Editor/Posteditor";
 import { getCategories } from "../services/categoryServices";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import PostPreview from "../components/PostPreview";
 
 const CreatePost = () => {
 
@@ -19,6 +20,7 @@ const CreatePost = () => {
     const [error,setError] = useState("");
     const [successmessage,setSuccessmessage] = useState('')
     const [isSlugEdited, setIsSlugEdited] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
 
     const navigate = useNavigate();
     
@@ -107,6 +109,26 @@ const CreatePost = () => {
 
         fetchCategories();
     },[])
+
+    // const selectedCategory = categories.find((item)=>item._id===category)
+    const previewPost = {
+        title,
+        excerpt,
+        coverImage,
+        content,
+        status,
+        category
+    };
+
+    // If it is the preview return this
+    if(showPreview) {
+    return (
+            <PostPreview
+                post={previewPost}
+                onBack={() => setShowPreview(false)}
+            />
+        );
+    }
 
     return (
         <div className="min-h-screen bg-zinc-50">
@@ -264,12 +286,21 @@ const CreatePost = () => {
                             </div>
                         </div>
                     <div>
+                        {/* Create post button */}
                         <button
                             type="submit"
-                            className="rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 "
+                            className="rounded-lg cursor-pointer bg-zinc-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-zinc-700 active:scale-95 "
                             disabled={isLoading}
                         >
                             {isLoading?'Creating post':'Create Post'}
+                        </button>
+                        {/* Preview button */}
+                        <button
+                            type="button"
+                            onClick={() => setShowPreview(true)}
+                            className="rounded-lg border ml-5 cursor-pointer border-zinc-300 bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition hover:bg-zinc-100"
+                        >
+                            Preview
                         </button>
                     </div>
                 </form>
