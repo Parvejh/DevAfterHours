@@ -1,11 +1,18 @@
 import api from "../services/api"
 // import {token} from '../context/AuthContext'
 
-export const getPosts = async (search)=>{
-    const modifiedSearch = search && search.trim();
-    const response = (modifiedSearch)
-                    ?await api.get(`/posts?search=${encodeURIComponent(modifiedSearch)}`)
-                    :await api.get("/posts")
+export const getPosts = async (search,page)=>{
+    const params = new URLSearchParams();
+    if (search?.trim()) {
+        params.append("search", search.trim());
+    }
+    if (page) {
+        params.append("page", page);
+    }
+    const query = params.toString();
+    const response = await api.get(
+        query ? `/posts?${query}` : "/posts"
+    );
     return response.data;
 }
 export const getPostBySlug = async (slug)=>{

@@ -60,6 +60,10 @@ module.exports.createPost = async (req,res)=>{
 module.exports.getPosts = async (req,res)=>{
     try{
         const search = req.query.search
+        const requestedPage = Number(req.query.page) || 1
+        const currentPage = Math.max(1,requestedPage)
+        const limit = 1
+        const skip = (currentPage-1)*limit
         // Build the query based on search
         const query =   (search) 
                         // If search exist, update the query
@@ -95,12 +99,31 @@ module.exports.getPosts = async (req,res)=>{
                             ]
                         }      
                         : {status:'published'}    //default query if no search is there  
-        const posts = await Post.find(query).sort({publishedAt:-1});
+
+        const totalPosts = await Post.countDocuments(query); //does the work of above two lines
+        const totalPages = Math.ceil(totalPosts/limit);
+
+        if (currentPage > totalPages && totalPages > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Page does not exist"
+            });
+        }
+
+        const posts = await Post.find(query).sort({publishedAt:-1}).skip(skip).limit(limit);
+
+        // const totalPosts = await Post.find(query);
+        // const totalPostsCount = totalPosts.length
 
         return res.status(200).json({
             success:true,
             message:"Post retrieved successfully",
-            posts:posts
+            posts:posts,
+            pagination:{
+                currentPage,
+                totalPosts,
+                totalPages
+            }
         })
 
     }catch(error){

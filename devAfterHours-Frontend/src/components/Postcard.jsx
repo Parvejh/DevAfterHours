@@ -6,7 +6,7 @@ const PostCard = ({ post }) => {
             to={`/posts/${post.slug}`}
             className="group block"
         >
-            <article className="mb-6 flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-lg md:flex-row min-w-0">
+            <article className="mb-6 flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-lg md:flex-row min-w-0 h-50">
 
                 {/* Cover Image */}
                 <div className="h-56 w-full shrink-0 overflow-hidden bg-zinc-100 sm:h-auto md:w-[40%]">
@@ -38,7 +38,7 @@ const PostCard = ({ post }) => {
                         </h2>
 
                         {/* Excerpt */}
-                        <p className="mt-3 line-clamp-3 text-sm leading-6 text-zinc-600 wrap-break-word line-clamp-2">
+                        <p className="mt-3 text-sm leading-6 text-zinc-600 wrap-break-word line-clamp-1">
                             {post.excerpt}
                         </p>
                     </div>
