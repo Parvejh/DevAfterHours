@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Navbar from "../components/Home/Navbar"
 import {getPosts} from '../services/postServices'
 import PostCard from "../components/Postcard";
-import {ArrowRight,ArrowLeft} from 'lucide-react'
+import {ArrowRight,ArrowLeft,X} from 'lucide-react'
 
 const Posts = () => {
     const[posts,setPosts] = useState([]);
@@ -14,11 +14,11 @@ const Posts = () => {
     const[currentPage,setCurrentPage] = useState(1);
     const[totalPages,setTotalPages] = useState(0);
     
-    const submitHandler = async (e)=>{
+    const submitHandler = (e)=>{
         e.preventDefault();
         setCurrentPage(1);
-        setSearchMessage("");
-        setSearchQuery(search.trim());
+        const trimmedSearch = search.trim();
+        setSearchQuery(trimmedSearch);
         // try{
         //     setIsLoading(true);
         //     setError("");
@@ -37,18 +37,26 @@ const Posts = () => {
         //     setIsLoading(false)
         // }
     }
+    const clearSearch = ()=>{
+        setSearch("")
+        setSearchQuery("");
+        setSearchMessage("");
+        setCurrentPage(1)
+    }
 
     const previousPage = ()=>{
         if(currentPage===1){
             return
         }
         setCurrentPage(prev=>prev-1)
+        
     }
     const nextPage = ()=>{
         if(currentPage === totalPages){
             return
         }
         setCurrentPage(prev=>prev+1)
+        
     }
 
     useEffect(()=>{
@@ -56,13 +64,14 @@ const Posts = () => {
             try{
                 setIsLoading(true)
                 setError("")
-                setSearchMessage("")
                 const data = await getPosts(searchQuery,currentPage);
                 const {totalPages} = data.pagination
                 setTotalPages(totalPages)
                 setPosts(data.posts)
                 if(data.posts.length===0 && searchQuery){
                     setSearchMessage(`No Post found for "${searchQuery}"`)
+                }else{
+                    setSearchMessage("")
                 }
             }catch(error){
                 console.error("Error fetching posts:", error);
@@ -78,8 +87,16 @@ const Posts = () => {
         extractPosts();
     },[currentPage,searchQuery])
 
+    // Scroll effect
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }, [currentPage]);
+
     const getPageNumbers = () => {
-        if(totalPages<5){
+        if(totalPages<=5){
             const pages = [];
             for (let i = 1; i <= totalPages; i++) {
                 pages.push(i);
@@ -117,21 +134,39 @@ const Posts = () => {
                 </p>
 
                 {/* Search Bar */}
-                <form className="w-full" onSubmit={submitHandler}>
-                    <input 
-                    type="text" 
-                    name="search" 
-                    className="mb-5 outline-none rounded px-5 py-2 text-lg w-full border border-zinc-500 text-zinc-700"
-                    placeholder="Search Posts" 
-                    value={search}
-                    onChange={(e)=>{
-                        setSearch(e.target.value)
-                    }}
-                    />
+                <form className="mb-5 flex w-full gap-2 items-start" onSubmit={submitHandler}>
+                    <div className="searchBar relative grow-1">
+                        <input 
+                        type="text" 
+                        name="search" 
+                        className="mb-5 outline-none rounded px-5 py-2 text-lg w-full border border-zinc-500 text-zinc-700"
+                        placeholder="Search Posts" 
+                        value={search}
+                        onChange={(e)=>{
+                            setSearch(e.target.value)
+                        }}
+                        />
+                        
+                        {search && (
+                            <button
+                                type="button"
+                                onClick={clearSearch}
+                                className="absolute right-3 top-1/3 -translate-y-1/2 text-zinc-500 hover:text-zinc-900 cursor-pointer"
+                                aria-label="Clear search"
+                            >
+                                <X size={21} />
+                            </button>
+                        )}
+                    </div>
+                    <button
+                        type="submit"
+                        className="rounded-md bg-zinc-900 text-lg px-7 py-2 font-medium text-white hover:bg-zinc-800 "
+                    >
+                        Search
+                    </button>
                 </form>
                 
-                {
-                    isLoading &&
+                {isLoading &&
                     (
                         <p className="mt-10 text-zinc-500">
                             Loading posts...
@@ -175,10 +210,11 @@ const Posts = () => {
                     )
                 }
                 {
-                    totalPages>0 &&
+                    totalPages>1 &&
                     <div className="flex items-center justify-between">
                         {/* Previous button */}
                         <button 
+                        aria-label="Previous page"
                         className={`flex items-center gap-1 text-lg font-semibold text-zinc-700 group 
                             ${currentPage===1 ? 'opacity-70 cursor-not-allowed':' cursor-pointer'}`}
                         disabled={currentPage===1}
@@ -189,9 +225,7 @@ const Posts = () => {
                             </span>
                             Prev
                         </button>
-                        {/* <p className="text-sm">
-                            Page {currentPage} of {totalPages}
-                        </p> */}
+                        {/* Pagination Buttons */}
                         <div className="flex items-center gap-2">
                             {
                                 getPageNumbers().map((page,index)=>{
@@ -207,12 +241,14 @@ const Posts = () => {
                                     }
                                     return <button 
                                     key={page}
+                                    aria-label={`Go to page ${page}`}
                                     onClick={()=>setCurrentPage(page)}
-                                    className={`cursor-pointer h-9 w-9 rounded-md text-sm font-medium transition
+                                    disabled={currentPage===page}
+                                    className={`h-9 w-9 rounded-md text-sm font-medium transition
                                         ${
                                             currentPage === page
-                                                ? "bg-zinc-900 text-white"
-                                                : "text-zinc-600 hover:bg-zinc-200"
+                                                ? "bg-zinc-900 text-white cursor-default"
+                                                : "text-zinc-600 hover:bg-zinc-200 cursor-pointer"
                                         }
                                     `}>
                                         {page}
@@ -222,6 +258,7 @@ const Posts = () => {
                         </div>
                         {/* Next Button */}
                         <button
+                        aria-label="Next page"
                         className={`flex items-center gap-1 text-lg font-semibold text-zinc-700 group
                             ${currentPage===totalPages ? 'opacity-70 cursor-not-allowed':' cursor-pointer'}`} 
                         disabled={currentPage===totalPages}
