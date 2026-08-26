@@ -176,7 +176,7 @@ const Posts = () => {
                 }
                 {
                     totalPages>0 &&
-                    <div className="flex items-center gap-5">
+                    <div className="flex items-center justify-between">
                         {/* Previous button */}
                         <button 
                         className={`flex items-center gap-1 text-lg font-semibold text-zinc-700 group 
@@ -193,7 +193,6 @@ const Posts = () => {
                             Page {currentPage} of {totalPages}
                         </p> */}
                         <div className="flex items-center gap-2">
-                            
                             {
                                 getPageNumbers().map((page,index)=>{
                                     if (page === "...") {

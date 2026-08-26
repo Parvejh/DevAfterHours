@@ -62,7 +62,7 @@ module.exports.getPosts = async (req,res)=>{
         const search = req.query.search
         const requestedPage = Number(req.query.page) || 1
         const currentPage = Math.max(1,requestedPage)
-        const limit = 1
+        const limit = 5
         const skip = (currentPage-1)*limit
         // Build the query based on search
         const query =   (search) 

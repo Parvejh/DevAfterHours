@@ -32,6 +32,11 @@ The application provides an admin dashboard for creating, managing, editing, and
 - Search posts by title, slug or excerpt
 - Displays all published posts when no search results are found
 - Displays a search-specific "no post found" message
+- Server-side pagination
+- Previous/Next pagination controls
+- Page number navigation
+- Search with pagination
+- Pagination state synchronized with search
 
 ### Post Creation
 - Title
@@ -214,6 +219,29 @@ Axios
    ↓
 Express API
 ```
+## 📄 Search & Pagination
+
+The public posts page uses server-side search and pagination.
+
+### Search Flow
+
+```text
+User enters search term
+        ↓
+Posts page
+        ↓
+getPosts(search, page)
+        ↓
+GET /api/posts?search=term&page=1
+        ↓
+Backend filters published posts
+        ↓
+Backend applies pagination
+        ↓
+Posts + pagination metadata
+        ↓
+Posts page
+```
 
 ## ✍️ Create Post Flow
 
@@ -345,7 +373,12 @@ isLoading = false
 /posts
 ```
 
-Public posts page.
+Public posts page with:
+
+- Published posts
+- Search
+- Server-side pagination
+- Page navigation
 
 ```text
 /dashboard/posts
@@ -432,6 +465,8 @@ tailwindcss
 
 ## 🔄 Current CRUD Status
 
+## 🔄 Current Feature Status
+
 | Feature | Status |
 |---|---|
 | Create Post | ✅ |
@@ -446,21 +481,31 @@ tailwindcss
 | Error Handling | ✅ |
 | Success Feedback | ✅ |
 | Client-side State Update After Delete | ✅ |
+| Post Search | ✅ |
+| Search by Title | ✅ |
+| Search by Slug | ✅ |
+| Search by Excerpt | ✅ |
+| Server-side Pagination | ✅ |
+| Previous/Next Pagination | ✅ |
+| Page Number Navigation | ✅ |
+| Search + Pagination | ✅ |
 
 ## 🔮 Future Improvements
 
 - Better form validation
 - Image upload instead of image URLs
-- Pagination
 - Filter posts by status
 - Sort posts
+- Filter posts by category
+- Filter posts by tags
 - Confirmation modal before deletion
 - Loading skeletons
 - Toast notifications
 - Responsive mobile UI
 - Centralized Axios configuration
-- Axios interceptors for authentication errors
 - Better authentication/session handling
+- Improved error handling
+- Automated frontend tests
 
 ## 📌 Development Philosophy
 

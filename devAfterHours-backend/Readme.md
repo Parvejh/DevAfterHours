@@ -21,6 +21,10 @@ The backend is designed to power a React frontend and currently focuses on user 
 - MongoDB integration using Mongoose
 - Environment-based configuration
 - Modular MVC-style project structure
+- Server-side post pagination
+- Search published posts by title, slug, and excerpt
+- Combined search and pagination support
+- Pagination metadata including current page, total posts, and total pages
 
 ---
 
@@ -307,6 +311,23 @@ The endpoint is intended to update post metadata and content.
 The API verifies that the authenticated user is the author before allowing deletion.
 
 ---
+## 🔎 Search & Pagination
+
+The published posts endpoint supports both search and pagination.
+
+### Search
+
+Posts can be searched using:
+
+- `title`
+- `slug`
+- `excerpt`
+
+Example:
+
+```http
+GET /api/posts?search=javascript
+```
 
 # 🗄️ Database Models
 
@@ -517,18 +538,24 @@ Posts
 
 The project is currently being developed alongside the frontend.
 
-Planned improvements include:
+Completed:
 
-- [ ] Complete post CRUD flow
+- [x] Post CRUD flow
+- [x] Draft/published/archived post states
+- [x] Pagination
+- [x] Search by title, slug, and excerpt
+- [x] Search + pagination
+- [x] Pagination metadata
+
+Planned improvements:
+
 - [ ] Category management APIs
 - [ ] Tag management APIs
 - [ ] User profile APIs
-- [ ] Draft/publish workflow
 - [ ] Automatic `publishedAt` handling
 - [ ] Post view incrementing
-- [ ] Pagination
-- [ ] Search
 - [ ] Filtering by category and tags
+- [ ] Sorting posts
 - [ ] Related posts
 - [ ] Request validation
 - [ ] Centralized error handling
