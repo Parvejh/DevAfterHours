@@ -489,6 +489,7 @@ tailwindcss
 | Previous/Next Pagination | ✅ |
 | Page Number Navigation | ✅ |
 | Search + Pagination | ✅ |
+| Posts filtering based on Category | ✅ |
 
 ## 🔮 Future Improvements
 
@@ -496,7 +497,7 @@ tailwindcss
 - Image upload instead of image URLs
 - Filter posts by status
 - Sort posts
-- Filter posts by category
+- Filter posts by category - done
 - Filter posts by tags
 - Confirmation modal before deletion
 - Loading skeletons
