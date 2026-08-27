@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 const PostCard = ({ post }) => {
+    console.log(post)
     return (
         <Link
             to={`/posts/${post.slug}`}
@@ -29,7 +30,7 @@ const PostCard = ({ post }) => {
                     <div>
                         {/* Category */}
                         <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-                            Development
+                            {post.category.name}
                         </p>
 
                         {/* Title */}

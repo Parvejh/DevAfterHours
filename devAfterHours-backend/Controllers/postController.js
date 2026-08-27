@@ -123,7 +123,7 @@ module.exports.getPosts = async (req,res)=>{
             });
         }
 
-        const posts = await Post.find(query).sort({publishedAt:-1}).skip(skip).limit(limit);
+        const posts = await Post.find(query).sort({publishedAt:-1}).skip(skip).limit(limit).populate("category");
 
         // const totalPosts = await Post.find(query);
         // const totalPostsCount = totalPosts.length
