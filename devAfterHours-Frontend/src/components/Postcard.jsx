@@ -6,10 +6,10 @@ const PostCard = ({ post }) => {
             to={`/posts/${post.slug}`}
             className="group block"
         >
-            <article className="mb-6 flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-lg md:flex-row min-w-0 h-50">
+            <article className="mb-6 flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-lg md:flex-row min-w-0 md:h-50">
 
                 {/* Cover Image */}
-                <div className="h-56 w-full shrink-0 overflow-hidden bg-zinc-100 sm:h-auto md:w-[40%]">
+                <div className=" w-full shrink-0 overflow-hidden bg-zinc-100 md:h-auto md:w-[40%]">
                     {post.coverImage ? (
                         <img
                             src={post.coverImage}

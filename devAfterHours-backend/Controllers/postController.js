@@ -1,4 +1,5 @@
 const Post = require('../Models/Post')
+const Category = require('../Models/Category')
 
 // Create a new Post
 module.exports.createPost = async (req,res)=>{
@@ -29,6 +30,15 @@ module.exports.createPost = async (req,res)=>{
         else 
             publishedAt = null;
 
+        const fetchedCategory = await Category.findOne({slug:category.toLowerCase()})
+
+        if (!fetchedCategory) {
+            return res.status(404).json({
+                success: false,
+                message: "Category not found."
+            });
+        }
+
         const newPost = await Post.create({
             title,
             slug,
@@ -36,9 +46,11 @@ module.exports.createPost = async (req,res)=>{
             content,
             coverImage,
             status,
+            category:fetchedCategory._id,
             author:req.user._id,
             publishedAt
         });
+
 
         return res.status(201).json({
             success:true,
@@ -64,42 +76,43 @@ module.exports.getPosts = async (req,res)=>{
         const currentPage = Math.max(1,requestedPage)
         const limit = 5
         const skip = (currentPage-1)*limit
+
+        const category = req.query.category ;
         // Build the query based on search
-        const query =   (search) 
-                        // If search exist, update the query
-                        ? {status:'published',
-                            $or: [
-                                {
-                                    title: {
-                                        $regex: search,
-                                        $options: "i"
-                                    }
-                                },
-
-                                {
-                                    slug: {
-                                        $regex: search,
-                                        $options: "i"
-                                    }
-                                },
-
-                                {
-                                    excerpt: {
-                                        $regex: search,
-                                        $options: "i"
-                                    }
-                                },
-                                // Leaving the content search
-                                // {
-                                //     content: {
-                                //         $regex: search,
-                                //         $options: "i"
-                                //     }
-                                // }
-                            ]
-                        }      
-                        : {status:'published'}    //default query if no search is there  
-
+        const query = {status:'published'}
+        if(search){
+            query.$or=[
+                {
+                    title: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                },
+                {
+                    slug: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                },
+                {
+                    excerpt: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                }
+            ]
+        }
+        if(category){
+            const categoryDoc = await Category.findOne({slug:category.toLowerCase()});
+            if(!categoryDoc){
+                return res.status(404).json({
+                    status:false,
+                    message:"Category not found."
+                })
+            }
+            query.category = categoryDoc._id;
+        }
+        
         const totalPosts = await Post.countDocuments(query); //does the work of above two lines
         const totalPages = Math.ceil(totalPosts/limit);
 

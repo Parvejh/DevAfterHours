@@ -40,10 +40,10 @@ const CreatePost = () => {
                     title,
                     slug,
                     excerpt,
+                    category,
                     coverImage,
                     content,
-                    status,
-                    category
+                    status
                 }
             )
             // Set Category 

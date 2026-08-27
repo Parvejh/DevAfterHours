@@ -1,20 +1,27 @@
 import api from "../services/api"
 // import {token} from '../context/AuthContext'
 
-export const getPosts = async (search,page)=>{
+export const getPosts = async (search="",page=1,signal,category="")=>{
     const params = new URLSearchParams();
     if (search?.trim()) {
         params.append("search", search.trim());
     }
-    if (page) {
-        params.append("page", page);
+
+    params.append("page", page);
+
+    if(category?.trim()){
+        params.append("category",category.trim())
     }
+
     const query = params.toString();
     const response = await api.get(
-        query ? `/posts?${query}` : "/posts"
+        query ? `/posts?${query}` : "/posts",{
+            signal
+        }
     );
     return response.data;
 }
+
 export const getPostBySlug = async (slug)=>{
     const response = await api.get(`/posts/${slug}`);
     return response.data

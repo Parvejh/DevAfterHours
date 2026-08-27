@@ -3,6 +3,7 @@ import Navbar from "../components/Home/Navbar"
 import {getPosts} from '../services/postServices'
 import PostCard from "../components/Postcard";
 import {ArrowRight,ArrowLeft,X} from 'lucide-react'
+import {getCategories} from '../services/categoryServices'
 
 const Posts = () => {
     const[posts,setPosts] = useState([]);
@@ -13,6 +14,8 @@ const Posts = () => {
     const[searchMessage,setSearchMessage] = useState("")
     const[currentPage,setCurrentPage] = useState(1);
     const[totalPages,setTotalPages] = useState(0);
+    const[categories,setCategories] = useState([]);
+    const[currentCategory,setCurrentCategory] = useState("")
     
     const submitHandler = (e)=>{
         e.preventDefault();
@@ -59,12 +62,46 @@ const Posts = () => {
         
     }
 
+    // Fetch categories
     useEffect(()=>{
+
+        const controller = new AbortController();
+        const extractCategories = async()=>{
+            try{
+                setIsLoading(true)
+                setError("")
+                const fetchedCategories = await getCategories();
+                setCategories(fetchedCategories.categories)
+            }catch(error){
+                console.error("Error fetching posts:", error);
+                setError(
+                    error.response?.data?.message ||
+                    "Unable to extract Categories."
+                );
+            }finally{
+                // setIsLoading(false)
+                if (!controller.signal.aborted) {
+                    setIsLoading(false);
+                }
+            }
+        }
+
+        extractCategories();
+
+        return () => {
+            controller.abort();
+        };
+    },[])
+
+    // Fetch Posts
+    useEffect(()=>{
+
+        const controller = new AbortController();
         const extractPosts = async()=>{
             try{
                 setIsLoading(true)
                 setError("")
-                const data = await getPosts(searchQuery,currentPage);
+                const data = await getPosts(searchQuery,currentPage,controller.signal,currentCategory);
                 const {totalPages} = data.pagination
                 setTotalPages(totalPages)
                 setPosts(data.posts)
@@ -74,18 +111,48 @@ const Posts = () => {
                     setSearchMessage("")
                 }
             }catch(error){
+                if (error.name === "CanceledError") {
+                    return;
+                }
                 console.error("Error fetching posts:", error);
                 setError(
                     error.response?.data?.message ||
                     "Unable to load posts."
                 );
             }finally{
-                setIsLoading(false)
+                // setIsLoading(false)
+                if (!controller.signal.aborted) {
+                    setIsLoading(false);
+                }
+            }
+        }
+        const extractCategories = async()=>{
+            try{
+                setIsLoading(true)
+                setError("")
+                const fetchedCategories = await getCategories();
+                setCategories(fetchedCategories.categories)
+            }catch(error){
+                console.error("Error fetching posts:", error);
+                setError(
+                    error.response?.data?.message ||
+                    "Unable to extract Categories."
+                );
+            }finally{
+                // setIsLoading(false)
+                if (!controller.signal.aborted) {
+                    setIsLoading(false);
+                }
             }
         }
 
         extractPosts();
-    },[currentPage,searchQuery])
+        extractCategories();
+
+        return () => {
+            controller.abort();
+        };
+    },[currentPage,searchQuery,currentCategory])
 
     // Scroll effect
     useEffect(() => {
@@ -135,7 +202,7 @@ const Posts = () => {
 
                 {/* Search Bar */}
                 <form className="mb-5 flex w-full gap-2 items-start" onSubmit={submitHandler}>
-                    <div className="searchBar relative grow-1">
+                    <div className="searchBar relative grow">
                         <input 
                         type="text" 
                         name="search" 
@@ -165,6 +232,29 @@ const Posts = () => {
                         Search
                     </button>
                 </form>
+
+                {/* Category filter */}
+                <select 
+                name="category" 
+                value={currentCategory}
+                onChange={(e)=>{
+                    setCurrentCategory(e.target.value);
+                    setCurrentPage(1)
+                }}
+                className="mb-5 border w-fit px-3 py-1 rounded">
+                    <option value="" disabled selected hidden>Choose Category</option>
+                    <option value="">
+                        Clear Categories
+                    </option>
+                    {categories.map((category)=>(
+                        <option 
+                        key={category._id}
+                        value={category.slug}
+                        >
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
                 
                 {isLoading &&
                     (
@@ -211,7 +301,7 @@ const Posts = () => {
                 }
                 {
                     totalPages>1 &&
-                    <div className="flex items-center justify-between">
+                    <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
                         {/* Previous button */}
                         <button 
                         aria-label="Previous page"
