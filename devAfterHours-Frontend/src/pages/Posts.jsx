@@ -191,12 +191,12 @@ const Posts = () => {
         <div className="min-h-screen bg-zinc-50">
             <Navbar />
 
-            <main className="mx-auto max-w-7xl px-6 py-16">
-                <h1 className="text-4xl font-bold tracking-tight text-zinc-950">
+            <main className="mx-auto max-w-7xl px-2 py-7 sm:px-6 sm:py-16">
+                <h1 className="sm:text-4xl text-xl font-bold tracking-tight text-zinc-950">
                     All Posts
                 </h1>
 
-                <p className="mt-3 text-zinc-500 mb-5">
+                <p className="sm:my-3 my-1 text-zinc-500 text-sm sm:text-lg">
                     Explore everything I've written.
                 </p>
 

@@ -18,18 +18,18 @@ const Navbar = () => {
                     {/* {data.value} */}
                 </div>
                 {/* Navigation */}
-                <div className="flex items-center gap-8">
+                <div className="flex items-center gap-1 sm:gap-8">
 
                     <Link
                         to="/"
-                        className="text-sm font-medium text-zinc-900"
+                        className="text-xs sm:text-sm font-medium text-zinc-900"
                     >
                         Home
                     </Link>
 
                     <Link
                         to="/posts"
-                        className="text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+                        className="text-xs sm:text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
                     >
                         Posts
                     </Link>
@@ -37,7 +37,7 @@ const Navbar = () => {
                     {!isAuthenticated &&
                         <Link
                             to="/about"
-                            className="text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+                            className="text-xs sm:text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
                         >
                             About
                         </Link>
@@ -47,13 +47,13 @@ const Navbar = () => {
                         <>
                             <Link
                             to="/dashboard"
-                            className="hover:border-b-1 text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+                            className="hover:border-b-1 text-xs sm:text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
                             >
                                 Dashboard
                             </Link>
                             <button
                                 onClick={logout}
-                                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+                                className="rounded-lg bg-zinc-900 px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm sm:font-medium font-light text-white transition hover:bg-zinc-800"
                             >
                                 Logout
                             </button>
@@ -61,7 +61,7 @@ const Navbar = () => {
                         ) : (
                         <Link
                             to="/login"
-                            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+                            className="rounded-lg bg-zinc-900 px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm sm:font-medium font-light text-white transition hover:bg-zinc-800"
                         >
                             Sign In
                         </Link>
