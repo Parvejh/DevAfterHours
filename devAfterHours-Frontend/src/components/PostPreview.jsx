@@ -1,4 +1,9 @@
+import { sanitizePostContent } from '../utils/sanitizePostContent';
+
 const PostPreview = ({ post, onBack }) => {
+  // -- Make the editor preview follow the same safe-rendering rules as the public post page.
+  const safeContent = sanitizePostContent(post.content);
+
   return (
         <div className="min-h-screen bg-zinc-50">
             <main className="mx-auto max-w-4xl px-6 py-12">
@@ -53,7 +58,7 @@ const PostPreview = ({ post, onBack }) => {
                     <div
                         className="prose prose-zinc max-w-none"
                         dangerouslySetInnerHTML={{
-                            __html: post.content || "<p>No content yet.</p>"
+                            __html: safeContent || "<p>No content yet.</p>"
                         }}
                     />
                 </article>

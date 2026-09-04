@@ -2,12 +2,15 @@ import { useParams } from "react-router-dom";
 import Navbar from "../components/Home/Navbar";
 import {getPostBySlug} from '../services/postServices';
 import { useEffect,useState } from "react";
+import { sanitizePostContent } from '../utils/sanitizePostContent';
 
 const Post = () => {
     const { slug } = useParams();
     const[post,setPost] = useState(null);
     const[isLoading,setIsLoading] = useState(true);
     const[error,setError] = useState("")
+    // -- Re-sanitize on read to protect visitors from unsafe HTML saved before server-side sanitization existed.
+    const safeContent = sanitizePostContent(post?.content);
 
     useEffect(()=>{
         const generatePost = async()=>{
@@ -100,7 +103,7 @@ const Post = () => {
                         {/* Article Content */}
                         <div
                             className="post-content"
-                            dangerouslySetInnerHTML={{ __html: post.content }}
+                            dangerouslySetInnerHTML={{ __html: safeContent }}
                         />
 
                     </article>

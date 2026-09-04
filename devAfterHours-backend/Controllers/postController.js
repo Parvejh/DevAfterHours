@@ -1,5 +1,6 @@
 const Post = require('../Models/Post')
 const Category = require('../Models/Category')
+const sanitizePostContent = require('../Utils/sanitizePostContent');
 
 // Create a new Post
 module.exports.createPost = async (req,res)=>{
@@ -36,11 +37,12 @@ module.exports.createPost = async (req,res)=>{
             });
         }
 
+        // -- Sanitize rich-text HTML on the server so browser-side requests cannot store executable content.
         const newPost = await Post.create({
             title,
             slug,
             excerpt,
-            content,
+            content: sanitizePostContent(content),
             coverImage,
             status,
             category:fetchedCategory._id,
@@ -196,6 +198,10 @@ module.exports.editPost = async(req,res)=>{
                 .filter((field) => req.body[field] !== undefined)
                 .map((field) => [field, req.body[field]])
         );
+        // -- Apply the same server-side sanitization whenever an existing article's content is changed.
+        if (updatedPostData.content !== undefined) {
+            updatedPostData.content = sanitizePostContent(updatedPostData.content);
+        }
         // Handle publishedAt based on status change
         if(existingPost.status!== 'published' &&
             updatedPostData.status === 'published'
