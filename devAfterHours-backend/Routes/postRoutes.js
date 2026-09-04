@@ -19,6 +19,7 @@ router.get('/edit/:id',
     postController.getPostForEdit
 );
 
+// -- This is the only supported post-update endpoint; the broken slug-based update route was removed.
 // Edit a post
 router.patch('/edit/:id',
     authMiddleware,
@@ -35,13 +36,6 @@ router.post(
     authMiddleware,
     postController.createPost
 );
-
-// Update existing post
-router.patch(
-    '/:slug',
-    authMiddleware,
-    postController.updatePost
-)
 
 // Delete a post
 router.delete(

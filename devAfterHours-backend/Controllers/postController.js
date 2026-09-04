@@ -24,11 +24,8 @@ module.exports.createPost = async (req,res)=>{
             })
         }
 
-        // Check if the new post is published
-        if(status==='published')
-            publishedAt = new Date();
-        else 
-            publishedAt = null;
+        //--Keep this value local; the previous undeclared assignment created a global variable.
+        const publishedAt = status === 'published' ? new Date() : null;
 
         const fetchedCategory = await Category.findOne({slug:category.toLowerCase()})
 
@@ -150,7 +147,9 @@ module.exports.getPosts = async (req,res)=>{
 // Gets manage post
 module.exports.getManagePosts = async (req,res)=>{
     try{
-        const posts = await Post.find({}).sort({
+        // --Authors see only their own posts; admins retain the all-posts management view.
+        const query = req.user.isAdmin ? {} : { author: req.user._id };
+        const posts = await Post.find(query).sort({
             publishedAt:-1
         });
 
@@ -173,7 +172,6 @@ module.exports.getManagePosts = async (req,res)=>{
 module.exports.editPost = async(req,res)=>{
     try{
         const id = req.params.id;
-        const updatedPostData = req.body
         const existingPost = await Post.findById(id);
 
         if(!existingPost){
@@ -182,6 +180,22 @@ module.exports.editPost = async(req,res)=>{
                 message:"Post not Found"
             })
         }
+
+        //--Block cross-author edits even when a user knows another post's ID.
+        if (!req.user.isAdmin && existingPost.author.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not allowed to edit this post."
+            });
+        }
+
+        //--Only content fields may change; ownership, view counts, and timestamps stay protected.
+        const allowedFields = ['title', 'slug', 'excerpt', 'content', 'coverImage', 'status'];
+        const updatedPostData = Object.fromEntries(
+            allowedFields
+                .filter((field) => req.body[field] !== undefined)
+                .map((field) => [field, req.body[field]])
+        );
         // Handle publishedAt based on status change
         if(existingPost.status!== 'published' &&
             updatedPostData.status === 'published'
@@ -196,13 +210,14 @@ module.exports.editPost = async(req,res)=>{
         }
         
 
-        await Post.findByIdAndUpdate(id,updatedPostData,{
+        const updatedPost = await Post.findByIdAndUpdate(id,updatedPostData,{
             new:true,
             runValidators:true
         })
         return res.status(200).json({
             success:true,
-            message:"Post Updated Successfully"
+            message:"Post Updated Successfully",
+            post: updatedPost
         })
     }catch(error){
         console.error(`Internal Server Error : ${error}`);
@@ -223,6 +238,13 @@ module.exports.getPostForEdit = async(req,res)=>{
             success:false,
             message:"Post does not exist"
         })
+        }
+        // --Block cross-author access to the private edit payload.
+        if (!req.user.isAdmin && post.author.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not allowed to view this post for editing."
+            });
         }
         return res.status(200).json({
             success:true,
@@ -269,54 +291,6 @@ module.exports.post = async (req,res)=>{
     }
 }
 
-// Update the post
-module.exports.updatePost  = async (req,res)=>{
-    try{
-        const slug = req.params.slug;
-
-        const post = await Post.findOne({slug});
-
-        if(!post){
-            return res.status(404).json({
-                success:false,
-                message:"Post not found.",
-            })
-        }
-
-        const updatedPost = await Post.findOneAndUpdate(
-            {slug},
-            {
-                title,
-                slug,
-                excerpt,
-                content,
-                coverImage,
-                category,
-                tags,
-                status,
-                publishedAt:new Date.now()
-            },{
-                new:true,
-                runValidators:true
-            }
-        );
-
-        return res.status(200).json({
-            success:true,
-            message:"Post Updated successfully",
-            originalPost:post,
-            updatedPost:updatedPost
-        })
-    }catch(e){
-        console.log(`Error while Updating post : ${e}`)
-        return res.status(500).json({
-            success:false,
-            message:"Updating Post Failed.",
-            error:e
-        })
-    }
-}
-
 // Delete a post
 module.exports.deletePost  = async (req,res)=>{
     try{
@@ -329,8 +303,8 @@ module.exports.deletePost  = async (req,res)=>{
                 message:"Post does not exist.",
             })
         }
-        // Validate user deleting the post
-        if(post.author.toString() !== req.user._id.toString()){
+        // CHANGE NOTE: An owner may delete their post; an admin may delete any post.
+        if(!req.user.isAdmin && post.author.toString() !== req.user._id.toString()){
             return res.status(403).json({
                 success:false,
                 message:"You are not allowed to delete this post"

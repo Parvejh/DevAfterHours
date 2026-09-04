@@ -1,0 +1,2 @@
+# -- Keep the agent's local change log out of commits and pushes.
+TEMP_CHANGES.md

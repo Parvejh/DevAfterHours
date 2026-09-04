@@ -7,6 +7,12 @@ export const loginUser = async (credentials) => {
 };
 
 export const getCurrentUser = async()=>{
-    const response = await api.get("/me");
+    // -- The API mounts this endpoint below /api/auth, so /me caused a 404 after page refresh.
+    const response = await api.get("/auth/me");
     return response.data;
 }
+
+export const registerUser = async (credentials) => {
+    const response = await api.post("/auth/register", credentials);
+    return response.data;
+};

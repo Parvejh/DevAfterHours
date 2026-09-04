@@ -39,14 +39,6 @@ module.exports.createUser = async (req,res)=>{
     }
 }
 
-// Display Login Page ( Removed as React will be used for UI)
-// module.exports.loginPage = (req,res)=>{
-//     return res.status(200).json({
-//         success:true,
-//         message:"Welcome to Login Page"
-//     })
-// }
-
 // Login User
 module.exports.login = async (req,res)=>{
     try{
@@ -81,7 +73,9 @@ module.exports.login = async (req,res)=>{
                     name:user.name,
                     email:user.email,
                     avatar:user.avatar,
-                    bio:user.bio
+                    bio:user.bio,
+                    // -- Exposes role information for future admin-aware UI; the backend still enforces permissions.
+                    isAdmin:user.isAdmin
                 },
                 token
             }

@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../Controllers/authController');
-const authMiddleware = require('../Middlewares/authMiddleware')
+const authMiddleware = require('../Middlewares/authMiddleware');
+const { requireRole } = require('../Utils/roleUtil');
+
 
 // router.get('/',authController.loginPage); we will not need it as React will generate the UI
 
 // Register
-router.post('/register',authController.createUser);
+router.post(
+    '/register',
+    authController.createUser
+);
 
 // Login
 router.post('/login',authController.login);

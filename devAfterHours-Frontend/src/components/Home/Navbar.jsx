@@ -1,8 +1,9 @@
-import {Link} from "react-router-dom"
+import {Link,useLocation} from "react-router-dom"
 import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
     const {isAuthenticated, logout} = useAuth();
+    const location = useLocation();
     return (
         <nav className="border-b border-zinc-200 bg-white/80 backdrop-blur-md">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -22,14 +23,14 @@ const Navbar = () => {
 
                     <Link
                         to="/"
-                        className="text-xs sm:text-sm font-medium text-zinc-900"
+                        className={`text-xs sm:text-sm font-medium ${(location.pathname === "/")?"text-zinc-900 underline underline-offset-4":"text-zinc-500"} text-zinc-500 transition hover:text-zinc-900`}
                     >
                         Home
                     </Link>
 
                     <Link
                         to="/posts"
-                        className="text-xs sm:text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+                        className={`text-xs sm:text-sm font-medium ${(location.pathname === "/posts")?"text-zinc-900 underline underline-offset-4":"text-zinc-500"} text-zinc-500 transition hover:text-zinc-900`}
                     >
                         Posts
                     </Link>
@@ -37,7 +38,7 @@ const Navbar = () => {
                     {!isAuthenticated &&
                         <Link
                             to="/about"
-                            className="text-xs sm:text-sm font-medium text-zinc-500 transition hover:text-zinc-900"
+                            className={`text-xs sm:text-sm font-medium ${(location.pathname === "/about")?"text-zinc-900 underline underline-offset-4":"text-zinc-500"} text-zinc-500 transition hover:text-zinc-900`}
                         >
                             About
                         </Link>

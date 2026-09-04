@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 
 const PostCard = ({ post }) => {
-    console.log(post)
+    // -- Older posts can have no populated category; set a default label.
+    const categoryName = post.category?.name || "Uncategorized";
+
     return (
         <Link
             to={`/posts/${post.slug}`}
@@ -30,7 +32,7 @@ const PostCard = ({ post }) => {
                     <div>
                         {/* Category */}
                         <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-                            {post.category.name}
+                            {categoryName}
                         </p>
 
                         {/* Title */}
